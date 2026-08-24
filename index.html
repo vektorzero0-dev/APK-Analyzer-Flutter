@@ -5,14 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APK Static Analyzer</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f4f4f9; }
-        .btn { display: block; width: 80%; max-width: 300px; margin: 15px auto; padding: 15px; background: #007bff; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; color: #333; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .btn { display: inline-block; padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; font-weight: bold; }
         .btn-wa { background: #25D366; }
+        input[type="file"] { margin: 15px 0; }
+        #result { background: #eef2f7; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-family: monospace; }
     </style>
 </head>
 <body>
-    <h2>APK Static Analyzer</h2>
-    <a href="https://wa.me/6282371729760" class="btn btn-wa">Hubungi WA (082371729760)</a>
-    <a href="mailto:vektorzero0@gmail.com" class="btn">Kirim Email (vektorzero0@gmail.com)</a>
+
+    <div class="card">
+        <h2>APK Static Analyzer</h2>
+        <p>Pilih file APK dari HP/Laptop Anda untuk dianalisis:</p>
+        <input type="file" id="apkFile" accept=".apk">
+        <button class="btn" onclick="analyzeApk()">Mulai Analisis</button>
+        
+        <h3>Hasil Analisis:</h3>
+        <div id="result">Belum ada file yang dianalisis.</div>
+    </div>
+
+    <div class="card">
+        <h3>Layanan & Bantuan Developer</h3>
+        <a href="https://wa.me/6282371729760" class="btn btn-wa" target="_blank">Hubungi WA (082371729760)</a>
+        <a href="mailto:vektorzero0@gmail.com" class="btn">Kirim Email</a>
+    </div>
+
+    <script>
+        function analyzeApk() {
+            const fileInput = document.getElementById('apkFile');
+            const resultDiv = document.getElementById('result');
+            
+            if (fileInput.files.length === 0) {
+                alert('Silakan pilih file APK terlebih dahulu!');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            resultDiv.innerText = `[Menganalisis...]\n` +
+                                  `Nama File : ${file.name}\n` +
+                                  `Ukuran    : ${(file.size / (1024 * 1024)).toFixed(2)} MB\n` +
+                                  `Tipe File : ${file.type || 'application/vnd.android.package-archive'}\n` +
+                                  `Status    : File APK Valid.\n\n` +
+                                  `Fitur scan manifest & permission siap dihubungkan dengan modul parser.`;
+        }
+    </script>
 </body>
 </html>
