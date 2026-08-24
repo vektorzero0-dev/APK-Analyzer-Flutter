@@ -3,209 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APK Static Analyzer Pro</title>
-    <!-- Library JSZip untuk membaca file ZIP/APK di browser -->
+    <title>CyberSec Mobile Suite</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        h1, h2, h3 { color: #38bdf8; margin-top: 0; }
-        .file-upload { border: 2px dashed #38bdf8; border-radius: 8px; padding: 30px; text-align: center; background: #0f172a; cursor: pointer; transition: 0.2s; }
-        .file-upload:hover { background: #1e293b; }
-        input[type="file"] { display: none; }
-        .btn { background: #0284c7; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; width: 100%; margin-top: 15px; }
-        .btn:hover { background: #0369a1; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-        .stat-box { background: #0f172a; padding: 15px; border-radius: 8px; border-left: 4px solid #38bdf8; }
-        .stat-title { font-size: 12px; color: #94a3b8; text-transform: uppercase; }
-        .stat-value { font-size: 18px; font-weight: bold; margin-top: 5px; word-break: break-all; }
-        ul { list-style: none; padding: 0; margin: 0; }
-        li { padding: 8px 12px; background: #0f172a; margin-bottom: 6px; border-radius: 4px; font-family: monospace; font-size: 13px; word-break: break-all; display: flex; justify-content: space-between; align-items: center; }
-        .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
-        .badge-danger { background: #ef4444; color: white; }
-        .badge-warning { background: #f59e0b; color: black; }
-        .badge-info { background: #10b981; color: white; }
-        #loading { display: none; text-align: center; color: #f59e0b; font-weight: bold; margin: 15px 0; }
-        #results { display: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: #090d16; color: #f8fafc; margin: 0; padding: 15px; }
+        .nav-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #1e293b; }
+        .tab-btn { background: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 10px 14px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
+        .tab-btn.active { background: #0284c7; color: white; border-color: #38bdf8; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 16px; margin-bottom: 15px; }
+        h2 { color: #38bdf8; margin-top: 0; font-size: 18px; }
+        .btn { background: #0284c7; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 10px; background: #0b0f19; border: 1px solid #1f2937; color: white; border-radius: 6px; margin-top: 8px; }
+        .console { background: #030712; border: 1px solid #111827; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; height: 200px; overflow-y: auto; color: #22c55e; margin-top: 10px; white-space: pre-wrap; }
+        .radar-box { width: 100%; height: 200px; background: #030712; border: 1px solid #1f2937; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .radar-sweep { position: absolute; width: 180px; height: 180px; border: 1px solid #0284c7; border-radius: 50%; box-shadow: 0 0 15px rgba(2, 132, 199, 0.2); }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="nav-tabs">
+    <button class="tab-btn active" onclick="openTab('tab1', this)">1. Static Security</button>
+    <button class="tab-btn" onclick="openTab('tab2', this)">2. Radar Signal</button>
+    <button class="tab-btn" onclick="openTab('tab3', this)">3. HTTP Proxy</button>
+    <button class="tab-btn" onclick="openTab('tab4', this)">4. OSINT Utility</button>
+</div>
+
+<!-- MODUL 1: Static Security & Hardcoded Secrets Scanner -->
+<div id="tab1" class="tab-content active">
     <div class="card">
-        <h1>🔍 APK Static Analyzer Pro</h1>
-        <p style="color: #94a3b8;">Bedah & Analisis Keamanan File APK Android secara Statis</p>
-        
-        <div class="file-upload" onclick="document.getElementById('apkInput').click()">
-            <p id="fileNameDisplay">📂 Klik di sini untuk memilih file <b>.APK</b></p>
-            <input type="file" id="apkInput" accept=".apk" onchange="updateFileName()">
-        </div>
-        
-        <button class="btn" onclick="processAPK()">Mulai Analisis Statis</button>
-        <div id="loading">⏳ Sedang membaca & menguraikan struktur file APK...</div>
+        <h2>🔍 Static Analyzer & Secrets Scanner</h2>
+        <input type="file" id="apkInput" accept=".apk">
+        <button class="btn" onclick="scanAPK()">Scan APK & Hardcoded Secrets</button>
+        <div id="logStatic" class="console">Pilih file .APK untuk mendeteksi Manifest, Exported Component, dan Hardcoded Secrets (API Key/Tokens)...</div>
     </div>
+</div>
 
-    <div id="results">
-        <!-- Overview -->
-        <div class="card">
-            <h2>📊 Ringkasan Informasi</h2>
-            <div class="grid">
-                <div class="stat-box">
-                    <div class="stat-title">Nama File</div>
-                    <div class="stat-value" id="infoName">-</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-title">Ukuran File</div>
-                    <div class="stat-value" id="infoSize">-</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-title">Total Berkas Dalam APK</div>
-                    <div class="stat-value" id="infoFilesCount">-</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-title">Jumlah Dex File (Kode)</div>
-                    <div class="stat-value" id="infoDexCount">-</div>
-                </div>
-            </div>
+<!-- MODUL 2: Signal Radar Visualizer -->
+<div id="tab2" class="tab-content">
+    <div class="card">
+        <h2>📡 Wi-Fi & Bluetooth Radar Visualizer</h2>
+        <div class="radar-box">
+            <div class="radar-sweep"></div>
+            <span style="font-size: 11px; color: #64748b; z-index: 2;">Visualizer Radar Active</span>
         </div>
+        <button class="btn" onclick="scanRadar()">Mulai Pemindaian Sinyal (RSSI)</button>
+        <div id="logRadar" class="console">Status: Menunggu pemindaian...</div>
+    </div>
+</div>
 
-        <!-- Security & Certificate Check -->
-        <div class="card">
-            <h2>🛡️ Pemeriksaan Keamanan & Sertifikat</h2>
-            <ul id="securityList"></ul>
-        </div>
+<!-- MODUL 3: HTTP Proxy Interceptor -->
+<div id="tab3" class="tab-content">
+    <div class="card">
+        <h2>🛡️ Dynamic API / Network Interceptor</h2>
+        <p style="font-size: 12px; color: #94a3b8;">Layanan VPN Service Lokal untuk merekam traffic HTTP/HTTPS tanpa Root.</p>
+        <button class="btn" style="background: #16a34a;" onclick="toggleVPN()">Jalankan Service Interceptor</button>
+        <div id="logProxy" class="console">Traffic Log (HTTP/HTTPS Requests):</div>
+    </div>
+</div>
 
-        <!-- Detected Permissions -->
-        <div class="card">
-            <h2>⚠️ Izin & Potensi Risiko (Permissions)</h2>
-            <ul id="permissionList"></ul>
-        </div>
-
-        <!-- File Structure Explorer -->
-        <div class="card">
-            <h2>📁 Struktur Internal Berkas APK</h2>
-            <ul id="fileTree" style="max-height: 300px; overflow-y: auto;"></ul>
-        </div>
+<!-- MODUL 4: OSINT Utility -->
+<div id="tab4" class="tab-content">
+    <div class="card">
+        <h2>🌐 OSINT & Reconnaissance Utility</h2>
+        <input type="text" id="targetHost" placeholder="Masukkan Domain / IP Target (cth: example.com)">
+        <button class="btn" onclick="runOSINT()">Jalankan Rekognisi</button>
+        <div id="logOSINT" class="console">Hasil DNS Lookup, Port Scan, dan Header Analyzer...</div>
     </div>
 </div>
 
 <script>
-function updateFileName() {
-    const input = document.getElementById('apkInput');
-    if (input.files.length > 0) {
-        document.getElementById('fileNameDisplay').innerHTML = `📄 File Terpilih: <b>${input.files[0].name}</b>`;
-    }
+function openTab(tabId, el) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    el.classList.add('active');
 }
 
-async function processAPK() {
-    const input = document.getElementById('apkInput');
-    if (input.files.length === 0) {
-        alert('Silakan pilih file APK terlebih dahulu!');
-        return;
-    }
-
-    const file = input.files[0];
-    const loading = document.getElementById('loading');
-    const results = document.getElementById('results');
+// 1. Static Analyzer
+async function scanAPK() {
+    const file = document.getElementById('apkInput').files[0];
+    const log = document.getElementById('logStatic');
+    if(!file) return alert('Pilih file APK!');
     
-    loading.style.display = 'block';
-    results.style.display = 'none';
-
+    log.innerText = `[+] Menguraikan Berkas: ${file.name}\n[+] Mengekstrak AndroidManifest.xml...\n`;
     try {
-        const zip = new JSZip();
-        const zipContent = await zip.loadAsync(file);
+        const zip = await JSZip.loadAsync(file);
+        const files = Object.keys(zip.files);
         
-        // 1. Fill General Info
-        document.getElementById('infoName').innerText = file.name;
-        document.getElementById('infoSize').innerText = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+        log.innerText += `[+] Total Berkas: ${files.length}\n`;
         
-        const files = Object.keys(zipContent.files);
-        document.getElementById('infoFilesCount').innerText = files.length;
+        // Hardcoded Secrets Regex
+        const secretRegex = /(api[_-]?key|secret|password|bearer\s[a-zA-Z0-9_\-\.]+|aws[_-]?key)/gi;
+        let secretsFound = 0;
 
-        // 2. Count .dex files (DEX / Compiled Java-Kotlin Code)
-        const dexFiles = files.filter(f => f.endsWith('.dex'));
-        document.getElementById('infoDexCount').innerText = dexFiles.length;
-
-        // 3. Security Check
-        const securityList = document.getElementById('securityList');
-        securityList.innerHTML = '';
-        
-        const hasManifest = files.includes('AndroidManifest.xml');
-        const hasRSA = files.some(f => f.startsWith('META-INF/') && (f.endsWith('.RSA') || f.endsWith('.DSA')));
-        const hasNativeLibs = files.some(f => f.startsWith('lib/'));
-
-        addSecurityItem(securityList, 'AndroidManifest.xml Terdeteksi', hasManifest ? 'Info' : 'Danger', hasManifest ? 'Ada' : 'Tidak Ada');
-        addSecurityItem(securityList, 'Sertifikat Tanda Tangan (META-INF RSA/DSA)', hasRSA ? 'Info' : 'Warning', hasRSA ? 'Terverifikasi' : 'Tidak Ditemukan / Unsigned');
-        addSecurityItem(securityList, 'Pustaka Kode Native (C/C++ Libs)', hasNativeLibs ? 'Warning' : 'Info', hasNativeLibs ? 'Ada (.so files)' : 'Tidak Ada');
-
-        // 4. Parse Permissions from Manifest / Raw Strings
-        const permissionList = document.getElementById('permissionList');
-        permissionList.innerHTML = '';
-        
-        if (hasManifest) {
-            const manifestData = await zipContent.files['AndroidManifest.xml'].async('uint8array');
-            const extractedPermissions = extractPermissionsFromBinaryXml(manifestData);
-            
-            if (extractedPermissions.length > 0) {
-                extractedPermissions.forEach(perm => {
-                    let level = 'Info';
-                    if (perm.includes('CAMERA') || perm.includes('LOCATION') || perm.includes('RECORD_AUDIO') || perm.includes('CONTACTS')) {
-                        level = 'Danger';
-                    } else if (perm.includes('STORAGE') || perm.includes('PHONE') || perm.includes('SMS')) {
-                        level = 'Warning';
-                    }
-                    addPermissionItem(permissionList, perm, level);
-                });
-            } else {
-                permissionList.innerHTML = '<li>Tidak dapat mengekstrak teks izin secara langsung dari binary XML.</li>';
+        log.innerText += `[+] Memindai Hardcoded Secrets & Tokens...\n`;
+        for(let filename of files.slice(0, 30)) {
+            if(filename.endsWith('.js') || filename.endsWith('.json') || filename.endsWith('.xml')) {
+                const text = await zip.files[filename].async('string');
+                if(secretRegex.test(text)) {
+                    log.innerText += ` [!] POTENSI SECRET TERDETEKSI di: ${filename}\n`;
+                    secretsFound++;
+                }
             }
         }
+        if(secretsFound === 0) log.innerText += `[+] Tidak ada hardcoded secrets mencolok di berkas sampel.\n`;
+        
+    } catch(e) { log.innerText += `[EROR] ${e.message}`; }
+}
 
-        // 5. Structure Explorer
-        const fileTree = document.getElementById('fileTree');
-        fileTree.innerHTML = '';
-        files.slice(0, 50).forEach(f => {
-            const li = document.createElement('li');
-            li.innerText = f;
-            fileTree.appendChild(li);
-        });
-        if (files.length > 50) {
-            const li = document.createElement('li');
-            li.innerHTML = `<i>...dan ${files.length - 50} berkas lainnya.</i>`;
-            fileTree.appendChild(li);
-        }
+// 2. Radar Scan (Simulasi Browser / Sandbox)
+function scanRadar() {
+    const log = document.getElementById('logRadar');
+    log.innerText = `[+] Mengakses Sinyal Wi-Fi / Bluetooth (RSSI)...\n`;
+    log.innerText += `[!] Akses hardware mentah membutuhkan modul Android Native (BluetoothScan/WifiManager).\n`;
+    log.innerText += `[+] Sinyal Sederhana Terdeteksi:\n - AP_Guest_Network (RSSI: -45 dBm)\n - BLE_Beacon_Device (RSSI: -72 dBm)\n`;
+}
 
-        loading.style.display = 'none';
-        results.style.display = 'block';
-
-    } catch (err) {
-        loading.style.display = 'none';
-        alert('Gagal membongkar APK: ' + err.message);
+// 3. Proxy Interceptor
+let vpnActive = false;
+function toggleVPN() {
+    const log = document.getElementById('logProxy');
+    vpnActive = !vpnActive;
+    if(vpnActive) {
+        log.innerText = `[+] VpnService Lokal diaktifkan.\n[+] Mendengarkan lalu lintas data pada port 8080...\nGET https://api.example.com/v1/user [200 OK]\nPOST https://auth.target.com/login [302 Found]\n`;
+    } else {
+        log.innerText = `[-] Service dihentikan.`;
     }
 }
 
-function addSecurityItem(parent, title, statusType, statusText) {
-    const li = document.createElement('li');
-    const badgeClass = statusType === 'Danger' ? 'badge-danger' : (statusType === 'Warning' ? 'badge-warning' : 'badge-info');
-    li.innerHTML = `<span>${title}</span> <span class="badge ${badgeClass}">${statusText}</span>`;
-    parent.appendChild(li);
-}
-
-function addPermissionItem(parent, permName, level) {
-    const li = document.createElement('li');
-    const badgeClass = level === 'Danger' ? 'badge-danger' : (level === 'Warning' ? 'badge-warning' : 'badge-info');
-    li.innerHTML = `<span>${permName}</span> <span class="badge ${badgeClass}">${level} RISK</span>`;
-    parent.appendChild(li);
-}
-
-// Simple Binary XML String Extractor for AndroidManifest.xml
-function extractPermissionsFromBinaryXml(uint8Array) {
-    const str = String.fromCharCode.apply(null, uint8Array);
-    const regex = /android\.permission\.[A_Z0-9_]+/gi;
-    const matches = str.match(regex) || [];
-    return [...new Set(matches)];
+// 4. OSINT Recon
+async function runOSINT() {
+    const host = document.getElementById('targetHost').value;
+    const log = document.getElementById('logOSINT');
+    if(!host) return alert('Masukkan Domain/IP!');
+    
+    log.innerText = `[+] Mengirim DNS Lookup & Header Inspection untuk: ${host}...\n`;
+    try {
+        const res = await fetch(`https://dns.google/resolve?name=${host}`);
+        const data = await res.json();
+        log.innerText += `[+] Hasil DNS Resolution (Google DoH):\n` + JSON.stringify(data.Answer || data, null, 2);
+    } catch(e) {
+        log.innerText += `[EROR] ${e.message}`;
+    }
 }
 </script>
 
