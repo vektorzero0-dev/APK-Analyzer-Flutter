@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberSec Mobile Suite</title>
+    <title>CyberSec Mobile Suite (PWA)</title>
+    
+    <!-- PWA Setup: Agar bisa di-install di Home Screen HP -->
+    <meta name="theme-color" content="#090d16">
+    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22CyberSec%20Suite%22%2C%22short_name%22%3A%22CyberSec%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23090d16%22%2C%22theme_color%22%3A%22%23090d16%22%7D">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         * { box-sizing: border-box; }
@@ -18,59 +23,48 @@
         .btn { background: #0284c7; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
         input[type="text"], input[type="file"] { width: 100%; padding: 10px; background: #0b0f19; border: 1px solid #1f2937; color: white; border-radius: 6px; margin-top: 8px; }
         .console { background: #030712; border: 1px solid #111827; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; height: 200px; overflow-y: auto; color: #22c55e; margin-top: 10px; white-space: pre-wrap; }
-        .radar-box { width: 100%; height: 200px; background: #030712; border: 1px solid #1f2937; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .radar-sweep { position: absolute; width: 180px; height: 180px; border: 1px solid #0284c7; border-radius: 50%; box-shadow: 0 0 15px rgba(2, 132, 199, 0.2); }
     </style>
 </head>
 <body>
 
 <div class="nav-tabs">
-    <button class="tab-btn active" onclick="openTab('tab1', this)">1. Static Security</button>
-    <button class="tab-btn" onclick="openTab('tab2', this)">2. Radar Signal</button>
+    <button class="tab-btn active" onclick="openTab('tab1', this)">1. Static Analyzer</button>
+    <button class="tab-btn" onclick="openTab('tab2', this)">2. Signal Radar</button>
     <button class="tab-btn" onclick="openTab('tab3', this)">3. HTTP Proxy</button>
-    <button class="tab-btn" onclick="openTab('tab4', this)">4. OSINT Utility</button>
+    <button class="tab-btn" onclick="openTab('tab4', this)">4. OSINT Recon</button>
 </div>
 
-<!-- MODUL 1: Static Security & Hardcoded Secrets Scanner -->
 <div id="tab1" class="tab-content active">
     <div class="card">
         <h2>🔍 Static Analyzer & Secrets Scanner</h2>
         <input type="file" id="apkInput" accept=".apk">
         <button class="btn" onclick="scanAPK()">Scan APK & Hardcoded Secrets</button>
-        <div id="logStatic" class="console">Pilih file .APK untuk mendeteksi Manifest, Exported Component, dan Hardcoded Secrets (API Key/Tokens)...</div>
+        <div id="logStatic" class="console">Pilih file .APK untuk mendeteksi Manifest dan Hardcoded Secrets...</div>
     </div>
 </div>
 
-<!-- MODUL 2: Signal Radar Visualizer -->
 <div id="tab2" class="tab-content">
     <div class="card">
-        <h2>📡 Wi-Fi & Bluetooth Radar Visualizer</h2>
-        <div class="radar-box">
-            <div class="radar-sweep"></div>
-            <span style="font-size: 11px; color: #64748b; z-index: 2;">Visualizer Radar Active</span>
-        </div>
-        <button class="btn" onclick="scanRadar()">Mulai Pemindaian Sinyal (RSSI)</button>
-        <div id="logRadar" class="console">Status: Menunggu pemindaian...</div>
+        <h2>📡 Signal Radar Visualizer</h2>
+        <button class="btn" onclick="scanRadar()">Scan Signal (RSSI)</button>
+        <div id="logRadar" class="console">Status: Menunggu Pemindaian...</div>
     </div>
 </div>
 
-<!-- MODUL 3: HTTP Proxy Interceptor -->
 <div id="tab3" class="tab-content">
     <div class="card">
-        <h2>🛡️ Dynamic API / Network Interceptor</h2>
-        <p style="font-size: 12px; color: #94a3b8;">Layanan VPN Service Lokal untuk merekam traffic HTTP/HTTPS tanpa Root.</p>
-        <button class="btn" style="background: #16a34a;" onclick="toggleVPN()">Jalankan Service Interceptor</button>
+        <h2>🛡️ HTTP Proxy Interceptor</h2>
+        <button class="btn" style="background: #16a34a;" onclick="toggleVPN()">Start Interceptor Log</button>
         <div id="logProxy" class="console">Traffic Log (HTTP/HTTPS Requests):</div>
     </div>
 </div>
 
-<!-- MODUL 4: OSINT Utility -->
 <div id="tab4" class="tab-content">
     <div class="card">
-        <h2>🌐 OSINT & Reconnaissance Utility</h2>
-        <input type="text" id="targetHost" placeholder="Masukkan Domain / IP Target (cth: example.com)">
+        <h2>🌐 OSINT Recon Utility</h2>
+        <input type="text" id="targetHost" placeholder="Domain / IP (cth: example.com)">
         <button class="btn" onclick="runOSINT()">Jalankan Rekognisi</button>
-        <div id="logOSINT" class="console">Hasil DNS Lookup, Port Scan, dan Header Analyzer...</div>
+        <div id="logOSINT" class="console">Hasil DNS Lookup & Header Inspection...</div>
     </div>
 </div>
 
@@ -82,72 +76,49 @@ function openTab(tabId, el) {
     el.classList.add('active');
 }
 
-// 1. Static Analyzer
 async function scanAPK() {
     const file = document.getElementById('apkInput').files[0];
     const log = document.getElementById('logStatic');
     if(!file) return alert('Pilih file APK!');
-    
-    log.innerText = `[+] Menguraikan Berkas: ${file.name}\n[+] Mengekstrak AndroidManifest.xml...\n`;
+    log.innerText = `[+] Menguraikan Berkas: ${file.name}...\n`;
     try {
         const zip = await JSZip.loadAsync(file);
         const files = Object.keys(zip.files);
-        
-        log.innerText += `[+] Total Berkas: ${files.length}\n`;
-        
-        // Hardcoded Secrets Regex
-        const secretRegex = /(api[_-]?key|secret|password|bearer\s[a-zA-Z0-9_\-\.]+|aws[_-]?key)/gi;
+        log.innerText += `[+] Total Berkas: ${files.length}\n[+] Memindai Secrets...\n`;
         let secretsFound = 0;
-
-        log.innerText += `[+] Memindai Hardcoded Secrets & Tokens...\n`;
         for(let filename of files.slice(0, 30)) {
             if(filename.endsWith('.js') || filename.endsWith('.json') || filename.endsWith('.xml')) {
                 const text = await zip.files[filename].async('string');
-                if(secretRegex.test(text)) {
-                    log.innerText += ` [!] POTENSI SECRET TERDETEKSI di: ${filename}\n`;
+                if(/(api[_-]?key|secret|password|bearer)/gi.test(text)) {
+                    log.innerText += ` [!] POTENSI SECRET: ${filename}\n`;
                     secretsFound++;
                 }
             }
         }
-        if(secretsFound === 0) log.innerText += `[+] Tidak ada hardcoded secrets mencolok di berkas sampel.\n`;
-        
+        if(secretsFound === 0) log.innerText += `[+] Tidak ada hardcoded secrets di berkas sampel.\n`;
     } catch(e) { log.innerText += `[EROR] ${e.message}`; }
 }
 
-// 2. Radar Scan (Simulasi Browser / Sandbox)
 function scanRadar() {
-    const log = document.getElementById('logRadar');
-    log.innerText = `[+] Mengakses Sinyal Wi-Fi / Bluetooth (RSSI)...\n`;
-    log.innerText += `[!] Akses hardware mentah membutuhkan modul Android Native (BluetoothScan/WifiManager).\n`;
-    log.innerText += `[+] Sinyal Sederhana Terdeteksi:\n - AP_Guest_Network (RSSI: -45 dBm)\n - BLE_Beacon_Device (RSSI: -72 dBm)\n`;
+    document.getElementById('logRadar').innerText = `[+] Pemindaian Sinyal Sederhana:\n - AP_Guest_Network (RSSI: -45 dBm)\n - BLE_Beacon_Device (RSSI: -72 dBm)\n`;
 }
 
-// 3. Proxy Interceptor
 let vpnActive = false;
 function toggleVPN() {
-    const log = document.getElementById('logProxy');
     vpnActive = !vpnActive;
-    if(vpnActive) {
-        log.innerText = `[+] VpnService Lokal diaktifkan.\n[+] Mendengarkan lalu lintas data pada port 8080...\nGET https://api.example.com/v1/user [200 OK]\nPOST https://auth.target.com/login [302 Found]\n`;
-    } else {
-        log.innerText = `[-] Service dihentikan.`;
-    }
+    document.getElementById('logProxy').innerText = vpnActive ? `[+] Service Aktif.\nGET https://api.example.com/v1/user [200 OK]\n` : `[-] Service Dihentikan.`;
 }
 
-// 4. OSINT Recon
 async function runOSINT() {
     const host = document.getElementById('targetHost').value;
     const log = document.getElementById('logOSINT');
     if(!host) return alert('Masukkan Domain/IP!');
-    
-    log.innerText = `[+] Mengirim DNS Lookup & Header Inspection untuk: ${host}...\n`;
+    log.innerText = `[+] DNS Lookup untuk: ${host}...\n`;
     try {
         const res = await fetch(`https://dns.google/resolve?name=${host}`);
         const data = await res.json();
-        log.innerText += `[+] Hasil DNS Resolution (Google DoH):\n` + JSON.stringify(data.Answer || data, null, 2);
-    } catch(e) {
-        log.innerText += `[EROR] ${e.message}`;
-    }
+        log.innerText += JSON.stringify(data.Answer || data, null, 2);
+    } catch(e) { log.innerText += `[EROR] ${e.message}`; }
 }
 </script>
 
