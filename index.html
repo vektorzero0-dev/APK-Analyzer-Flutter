@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APK ANALYZER PRIME (by ZEEO) | Cyber Forensic Suite</title>
     
-    <!-- Tailwind CSS, Lucide Icons & JSZip -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -25,19 +24,16 @@
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .font-mono-code { font-family: 'Fira Code', monospace; }
 
-        /* Neon Glow Effects */
         .glow-cyan { box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.25); }
         .glow-red { box-shadow: 0 0 35px -5px rgba(239, 68, 68, 0.25); }
         .text-glow-cyan { text-shadow: 0 0 12px rgba(6, 182, 212, 0.6); }
         .text-glow-red { text-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #030712; }
         ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
         
-        /* Cyber Grid Background Overlay */
         .bg-grid {
             background-size: 40px 40px;
             background-image: 
@@ -48,11 +44,9 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-grid">
 
-    <!-- Header / Navbar -->
+    <!-- Header -->
     <header class="border-b border-cyan-500/20 bg-gray-950/80 backdrop-blur-xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            
-            <!-- Branding Header -->
             <div class="flex items-center gap-4">
                 <div class="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-red-500/20 border border-cyan-500/40 glow-cyan">
                     <i data-lucide="file-search" class="w-6 h-6 text-cyan-400"></i>
@@ -68,11 +62,10 @@
                         </h1>
                         <span class="px-2 py-0.5 text-[10px] font-mono-code font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded-md">by ZEEO</span>
                     </div>
-                    <p class="text-xs text-gray-400 font-mono-code">SUPER-FOCUSED FORENSIC ENGINE</p>
+                    <p class="text-xs text-gray-400 font-mono-code">SUPER-FOCUSED FORENSIC ENGINE (FLUTTER SUPPORTED)</p>
                 </div>
             </div>
 
-            <!-- Developer Actions -->
             <div class="flex items-center gap-3">
                 <a href="https://wa.me/6282371729760?text=Halo%20ZEEO,%20Saya%20menggunakan%20APK%20ANALYZER%20PRIME" target="_blank" 
                    class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition-all">
@@ -85,14 +78,13 @@
                     <span>Email Developer</span>
                 </a>
             </div>
-
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 my-8 space-y-8 flex-grow w-full">
 
-        <!-- Dropzone / Upload Box -->
+        <!-- Dropzone -->
         <div class="relative overflow-hidden bg-gray-950/80 border border-gray-800 hover:border-cyan-500/50 rounded-3xl p-8 transition-all glow-cyan">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
             
@@ -117,7 +109,7 @@
                 <input type="file" id="apkFileInput" accept=".apk" class="hidden" onchange="handleFileChange(event)">
             </div>
 
-            <!-- File Metadata Info -->
+            <!-- Metadata Info -->
             <div id="fileMeta" class="mt-6 hidden pt-6 border-t border-gray-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono-code text-xs">
                 <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
                     <span class="text-gray-500 text-[10px] block">NAMA BERKAS</span>
@@ -134,10 +126,10 @@
             </div>
         </div>
 
-        <!-- Investigation Results Dashboard -->
+        <!-- Dashboard -->
         <div id="investigationDashboard" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <!-- Sidebar Navigation -->
+            <!-- Sidebar -->
             <div class="lg:col-span-3 flex flex-col gap-2.5">
                 <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-gray-900 border border-cyan-500/40 text-cyan-400 font-bold text-xs transition-all text-left">
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 1. Matriks & Log Sistem
@@ -155,12 +147,18 @@
                     <i data-lucide="layers" class="w-4 h-4"></i> 5. Pustaka Native (.SO)
                 </button>
                 
-                <button onclick="exportReport()" class="mt-4 flex items-center justify-center gap-2.5 w-full p-4 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-xs font-mono-code transition-all">
-                    <i data-lucide="download" class="w-4 h-4"></i> EKSPOR LAPORAN (JSON)
-                </button>
+                <!-- Action Export Buttons -->
+                <div class="mt-4 space-y-2">
+                    <button onclick="exportReport()" class="flex items-center justify-center gap-2.5 w-full p-3.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-xs font-mono-code transition-all">
+                        <i data-lucide="file-json" class="w-4 h-4"></i> EKSPOR JSON (RAPI)
+                    </button>
+                    <button onclick="exportTextReport()" class="flex items-center justify-center gap-2.5 w-full p-3.5 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-bold text-xs font-mono-code transition-all">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> EKSPOR LAPORAN (TXT)
+                    </button>
+                </div>
             </div>
 
-            <!-- Panel Contents -->
+            <!-- Panels -->
             <div class="lg:col-span-9 space-y-6">
                 
                 <!-- Panel 1: Overview -->
@@ -174,7 +172,7 @@
                         <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
                             <span class="text-[10px] font-bold text-gray-500 font-mono-code block">SECRETS TERLEKAS</span>
                             <h3 id="secretCount" class="text-3xl font-orbitron font-black text-cyan-400 mt-1">0</h3>
-                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Kunci API / Hardcoded Tokens</p>
+                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Kunci API / Tokens / Password</p>
                         </div>
                         <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
                             <span class="text-[10px] font-bold text-gray-500 font-mono-code block">IZIN RISK TINGGI</span>
@@ -280,7 +278,6 @@
             document.getElementById('fileMeta').classList.remove('hidden');
             document.getElementById('btnStart').removeAttribute('disabled');
 
-            // Calculate Hash
             const buffer = await apkFile.arrayBuffer();
             const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -299,6 +296,27 @@
             consoleBox.scrollTop = consoleBox.scrollHeight;
         }
 
+        // Helper untuk memodelkan string ASCII dari biner (.so / .dex)
+        function extractPrintableStrings(buffer, minLength = 6) {
+            const bytes = new Uint8Array(buffer);
+            let strings = [];
+            let current = "";
+
+            for (let i = 0; i < bytes.length; i++) {
+                const b = bytes[i];
+                if (b >= 32 && b <= 126) {
+                    current += String.fromCharCode(b);
+                } else {
+                    if (current.length >= minLength) {
+                        strings.push(current);
+                    }
+                    current = "";
+                }
+            }
+            if (current.length >= minLength) strings.push(current);
+            return strings;
+        }
+
         async function runFullInvestigation() {
             if(!apkFile) return;
 
@@ -308,36 +326,39 @@
             try {
                 currentZip = await JSZip.loadAsync(apkFile);
                 const files = Object.keys(currentZip.files);
-                logConsole(`Struktur APK terbuka. ${files.length} berkas internal siap diperiksa.`, 'success');
+                logConsole(`Struktur APK terbuka. ${files.length} berkas internal terdeteksi.`, 'success');
 
                 // 1. Audit Native Libraries
                 forensicResults.nativeLibs = files.filter(f => f.startsWith('lib/') && f.endsWith('.so'));
                 renderNativeLibs();
 
-                // 2. Scan Secrets & Patterns
                 forensicResults.secrets = [];
                 forensicResults.urls = [];
                 forensicResults.permissions = [];
 
                 const secretPatterns = [
                     { name: 'Google API Key', regex: /AIzaSy[a-zA-Z0-9_\-]{35}/g },
-                    { name: 'Firebase Database URL', regex: /https:\/\/[a-zA-Z0-9\-]+\.firebaseio\.com/g },
-                    { name: 'AWS Access Key ID', regex: /AKIA[0-9A-Z]{16}/g },
-                    { name: 'JWT Authorization Token', regex: /eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+/g },
-                    { name: 'Private Key Header', regex: /-----BEGIN PRIVATE KEY-----/g }
+                    { name: 'Firebase Database', regex: /https:\/\/[a-zA-Z0-9\-]+\.firebaseio\.com/g },
+                    { name: 'AWS Key', regex: /AKIA[0-9A-Z]{16}/g },
+                    { name: 'JWT Token', regex: /eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+/g },
+                    { name: 'Generic Secret Bearer', regex: /Bearer\s+[a-zA-Z0-9_\-\.]{20,}/gi },
+                    { name: 'Private Key', regex: /-----BEGIN PRIVATE KEY-----/g }
                 ];
 
-                const urlPattern = /https?:\/\/[a-zA-Z0-9\.\-_]+(?::\d+)?(?:\/[^\s"']*)?/g;
+                const urlPattern = /https?:\/\/[a-zA-Z0-9\.\-_]+(?::\d+)?(?:\/[^\s"'\x00]*)?/g;
 
-                logConsole(`Pemindaian biner untuk melacak kunci sensitif dan URL endpoint...`, 'info');
+                logConsole(`Menjalankan Engine Forensik Biner (Mendukung Flutter libapp.so & Dex)...`, 'info');
 
                 for(let f of files) {
-                    if(f.endsWith('.json') || f.endsWith('.xml') || f.endsWith('.js') || f.endsWith('.properties') || f.endsWith('.dex')) {
+                    // Pindai file teks standar dan file biner kritis (libapp.so / classes.dex)
+                    if(f.endsWith('.json') || f.endsWith('.xml') || f.endsWith('.js') || f.endsWith('.properties') || f.endsWith('.dex') || f.includes('libapp.so')) {
                         try {
-                            const content = await currentZip.files[f].async('string');
-                            
+                            const buffer = await currentZip.files[f].async('arraybuffer');
+                            const extractedStrings = extractPrintableStrings(buffer);
+                            const textContent = extractedStrings.join("\n");
+
                             secretPatterns.forEach(p => {
-                                const matches = content.match(p.regex);
+                                const matches = textContent.match(p.regex);
                                 if(matches) {
                                     matches.forEach(m => {
                                         forensicResults.secrets.push({ type: p.name, file: f, value: m });
@@ -345,11 +366,13 @@
                                 }
                             });
 
-                            const urls = content.match(urlPattern);
+                            const urls = textContent.match(urlPattern);
                             if(urls) {
                                 urls.forEach(u => {
-                                    if(!forensicResults.urls.includes(u) && u.length < 120) {
-                                        forensicResults.urls.push(u);
+                                    // Clean null bytes / trailing noise
+                                    const cleanUrl = u.split('\0')[0].replace(/[\\,\(\)]+$/, '');
+                                    if(!forensicResults.urls.includes(cleanUrl) && cleanUrl.length < 150 && !cleanUrl.includes('schema') && !cleanUrl.includes('adobe.com')) {
+                                        forensicResults.urls.push(cleanUrl);
                                     }
                                 });
                             }
@@ -357,15 +380,28 @@
                     }
                 }
 
-                logConsole(`Analisis selesai. Ditemukan ${forensicResults.secrets.length} kunci sensitif.`, 'success');
-
-                // 3. Scan Permissions
+                // 3. Scan Permissions dari Binary AndroidManifest.xml
                 if(currentZip.files['AndroidManifest.xml']) {
-                    const manifestStr = await currentZip.files['AndroidManifest.xml'].async('string');
-                    const permRegex = /android\.permission\.[A-Z_]+/g;
-                    const matches = manifestStr.match(permRegex);
-                    if(matches) forensicResults.permissions = [...new Set(matches)];
+                    try {
+                        const manifestBuffer = await currentZip.files['AndroidManifest.xml'].async('arraybuffer');
+                        const manifestStrings = extractPrintableStrings(manifestBuffer, 4);
+                        
+                        manifestStrings.forEach(str => {
+                            if(str.includes('android.permission.')) {
+                                const cleanPerm = str.match(/android\.permission\.[A-Z_]+/g);
+                                if(cleanPerm) {
+                                    cleanPerm.forEach(p => {
+                                        if(!forensicResults.permissions.includes(p)) {
+                                            forensicResults.permissions.push(p);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    } catch(e){}
                 }
+
+                logConsole(`Pemindaian Selesai! Ditemukan ${forensicResults.secrets.length} Kunci Rahasia & ${forensicResults.permissions.length} Permissions.`, 'success');
 
                 renderOverview();
                 renderSecrets();
@@ -378,11 +414,12 @@
         }
 
         function renderOverview() {
-            const dangerPerms = ['android.permission.CAMERA', 'android.permission.ACCESS_FINE_LOCATION', 'android.permission.RECORD_AUDIO', 'android.permission.READ_SMS', 'android.permission.SYSTEM_ALERT_WINDOW'];
+            const dangerPerms = ['android.permission.CAMERA', 'android.permission.ACCESS_FINE_LOCATION', 'android.permission.RECORD_AUDIO', 'android.permission.READ_SMS', 'android.permission.SYSTEM_ALERT_WINDOW', 'android.permission.READ_EXTERNAL_STORAGE'];
             const highRiskFound = forensicResults.permissions.filter(p => dangerPerms.includes(p)).length;
 
             let score = (forensicResults.secrets.length * 25) + (highRiskFound * 15);
             score = Math.min(score, 100);
+            forensicResults.riskScore = score;
 
             const scoreEl = document.getElementById('riskScore');
             scoreEl.innerText = `${score} / 100`;
@@ -404,7 +441,7 @@
         function renderSecrets() {
             const container = document.getElementById('secretsList');
             if(forensicResults.secrets.length === 0) {
-                container.innerHTML = `<div class="p-4 text-center text-gray-500 font-mono-code text-xs">Bersih. Tidak ada kunci sensitif yang terdeteksi.</div>`;
+                container.innerHTML = `<div class="p-4 text-center text-gray-500 font-mono-code text-xs">Bersih. Tidak ada kunci rahasia yang terdeteksi secara otomatis.</div>`;
                 return;
             }
 
@@ -422,7 +459,7 @@
         function renderPermissions() {
             const container = document.getElementById('permissionsList');
             if(forensicResults.permissions.length === 0) {
-                container.innerHTML = `<div class="col-span-full p-4 text-center text-gray-500 font-mono-code text-xs">Tidak dapat membaca manifes izin.</div>`;
+                container.innerHTML = `<div class="col-span-full p-4 text-center text-gray-500 font-mono-code text-xs">Tidak ada izin spesifik ditemukan.</div>`;
                 return;
             }
 
@@ -463,12 +500,74 @@
             `).join('');
         }
 
+        // 1. Ekspor Laporan JSON (Terstruktur & Rapi)
         function exportReport() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(forensicResults, null, 2));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href",     dataStr     );
-            dlAnchorElem.setAttribute("download", `APK_ANALYZER_PRIME_Report_${Date.now()}.json`);
-            dlAnchorElem.click();
+            const cleanReport = {
+                app_info: {
+                    analyzer: "APK ANALYZER PRIME (by ZEEO)",
+                    timestamp: new Date().toISOString(),
+                    target_hash_sha256: forensicResults.hash
+                },
+                summary: {
+                    risk_score: forensicResults.riskScore,
+                    total_secrets_leaked: forensicResults.secrets.length,
+                    total_permissions: forensicResults.permissions.length,
+                    total_endpoints_found: forensicResults.urls.length,
+                    total_native_libraries: forensicResults.nativeLibs.length
+                },
+                leaked_secrets: forensicResults.secrets,
+                permissions_audit: forensicResults.permissions,
+                extracted_endpoints: forensicResults.urls,
+                native_libraries: forensicResults.nativeLibs
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cleanReport, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `ZEEO_Forensic_Report_${Date.now()}.json`);
+            dlAnchor.click();
+        }
+
+        // 2. Ekspor Laporan Teks Ringkas (.TXT)
+        function exportTextReport() {
+            let text = `====================================================\n`;
+            text += `   APK ANALYZER PRIME (by ZEEO) - LAPORAN FORENSIK   \n`;
+            text += `====================================================\n\n`;
+            text += `WAKTU ANALISIS : ${new Date().toLocaleString('id-ID')}\n`;
+            text += `SHA-256 HASH   : ${forensicResults.hash}\n`;
+            text += `RISK SCORE     : ${forensicResults.riskScore} / 100\n\n`;
+            
+            text += `----------------------------------------------------\n`;
+            text += `1. KREDENSIAL / KUNCI TERBOCOR (${forensicResults.secrets.length})\n`;
+            text += `----------------------------------------------------\n`;
+            if(forensicResults.secrets.length === 0) {
+                text += `[BERSIH] Tidak ditemukan kunci rahasia terdeteksi.\n\n`;
+            } else {
+                forensicResults.secrets.forEach((s, i) => {
+                    text += `[${i+1}] TIPE : ${s.type}\n    LOKASI: ${s.file}\n    VALUE : ${s.value}\n\n`;
+                });
+            }
+
+            text += `----------------------------------------------------\n`;
+            text += `2. PERMISSIONS AUDIT (${forensicResults.permissions.length})\n`;
+            text += `----------------------------------------------------\n`;
+            forensicResults.permissions.forEach(p => {
+                text += `- ${p}\n`;
+            });
+            text += `\n`;
+
+            text += `----------------------------------------------------\n`;
+            text += `3. ENDPOINTS & URLS TERBACA (${forensicResults.urls.length})\n`;
+            text += `----------------------------------------------------\n`;
+            forensicResults.urls.forEach(u => {
+                text += `- ${u}\n`;
+            });
+
+            const dataStr = "data:text/plain;charset=utf-8," + encodeURIComponent(text);
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `ZEEO_Forensic_Report_${Date.now()}.txt`);
+            dlAnchor.click();
         }
     </script>
 </body>
