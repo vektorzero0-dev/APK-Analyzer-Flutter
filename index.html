@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZEEO - APK ANALYZER PRIME | Forensic & Reverse Engineering</title>
+    <title>APK ANALYZER PRIME (by ZEEO) | Cyber Forensic Suite</title>
     
-    <!-- Tailwind CSS & Lucide Icons -->
+    <!-- Tailwind CSS, Lucide Icons & JSZip -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -25,7 +25,7 @@
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .font-mono-code { font-family: 'Fira Code', monospace; }
 
-        /* Neon Glows */
+        /* Neon Glow Effects */
         .glow-cyan { box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.25); }
         .glow-red { box-shadow: 0 0 35px -5px rgba(239, 68, 68, 0.25); }
         .text-glow-cyan { text-shadow: 0 0 12px rgba(6, 182, 212, 0.6); }
@@ -37,7 +37,7 @@
         ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 99px; }
         ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
         
-        /* Grid Overlay Effect */
+        /* Cyber Grid Background Overlay */
         .bg-grid {
             background-size: 40px 40px;
             background-image: 
@@ -48,14 +48,14 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-grid">
 
-    <!-- Navbar Header -->
+    <!-- Header / Navbar -->
     <header class="border-b border-cyan-500/20 bg-gray-950/80 backdrop-blur-xl sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             
-            <!-- Logo & Brand -->
+            <!-- Branding Header -->
             <div class="flex items-center gap-4">
                 <div class="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-red-500/20 border border-cyan-500/40 glow-cyan">
-                    <i data-lucide="shield-alert" class="w-6 h-6 text-cyan-400"></i>
+                    <i data-lucide="file-search" class="w-6 h-6 text-cyan-400"></i>
                     <span class="absolute -bottom-1 -right-1 flex h-3 w-3">
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
                       <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
@@ -63,16 +63,18 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="font-orbitron font-black text-xl tracking-wider text-white">ZEEO <span class="text-cyan-400">ANALYZER</span> <span class="text-red-500">PRIME</span></h1>
-                        <span class="px-2 py-0.5 text-[10px] font-mono-code font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded-md">v3.0 PRO</span>
+                        <h1 class="font-orbitron font-black text-xl tracking-wider text-white">
+                            APK ANALYZER <span class="text-cyan-400">PRIME</span>
+                        </h1>
+                        <span class="px-2 py-0.5 text-[10px] font-mono-code font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded-md">by ZEEO</span>
                     </div>
-                    <p class="text-xs text-gray-400 font-mono-code">ULTIMATE CLIENT-SIDE APK FORENSIC ENGINE</p>
+                    <p class="text-xs text-gray-400 font-mono-code">SUPER-FOCUSED FORENSIC ENGINE</p>
                 </div>
             </div>
 
-            <!-- Developer Social / Action Buttons -->
+            <!-- Developer Actions -->
             <div class="flex items-center gap-3">
-                <a href="https://wa.me/6282371729760?text=Halo%20ZEEO,%20Saya%20tertarik%20dengan%20APK%20Sentinel%20Prime" target="_blank" 
+                <a href="https://wa.me/6282371729760?text=Halo%20ZEEO,%20Saya%20menggunakan%20APK%20ANALYZER%20PRIME" target="_blank" 
                    class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition-all">
                     <i data-lucide="message-square" class="w-4 h-4"></i>
                     <span>WhatsApp</span>
@@ -80,42 +82,42 @@
                 <a href="mailto:vektorzero0@gmail.com" 
                    class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-semibold transition-all">
                     <i data-lucide="mail" class="w-4 h-4"></i>
-                    <span>Email ZEEO</span>
+                    <span>Email Developer</span>
                 </a>
             </div>
 
         </div>
     </header>
 
-    <!-- Content Wrapper -->
+    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 my-8 space-y-8 flex-grow w-full">
 
-        <!-- Hero Dropzone Area -->
+        <!-- Dropzone / Upload Box -->
         <div class="relative overflow-hidden bg-gray-950/80 border border-gray-800 hover:border-cyan-500/50 rounded-3xl p-8 transition-all glow-cyan">
             <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
             
             <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
                 <div class="space-y-3 text-center md:text-left">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono-code">
-                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-                        <span>100% LOCAL RAM DESTRUCTION ENGINE</span>
+                        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
+                        <span>100% LOCAL RAM FORENSIC ANALYSIS</span>
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-orbitron font-bold text-white">SIAP UNTUK INVESTIGASI APK?</h2>
+                    <h2 class="text-2xl sm:text-3xl font-orbitron font-bold text-white">ANALISIS FILE APK SEKARANG</h2>
                     <p class="text-sm text-gray-400 max-w-xl">Muat berkas APK target untuk langsung membongkar kredensial rahasia.</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
                     <button onclick="document.getElementById('apkFileInput').click()" class="w-full sm:w-auto px-6 py-3.5 bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-cyan-500/40 rounded-2xl font-bold text-xs tracking-wider font-mono-code transition-all flex items-center justify-center gap-3">
-                        <i data-lucide="folder-open" class="w-5 h-5"></i> PILIH APK TARGET
+                        <i data-lucide="folder-open" class="w-5 h-5"></i> PILIH APK
                     </button>
                     <button onclick="runFullInvestigation()" id="btnStart" disabled class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 disabled:opacity-40 hover:from-cyan-400 hover:to-blue-500 text-gray-950 font-black text-xs tracking-wider font-orbitron rounded-2xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3">
-                        <i data-lucide="zap" class="w-5 h-5"></i> EKSEKUSI FORENSIK
+                        <i data-lucide="search" class="w-5 h-5"></i> MULAI ANALISIS
                     </button>
                 </div>
                 <input type="file" id="apkFileInput" accept=".apk" class="hidden" onchange="handleFileChange(event)">
             </div>
 
-            <!-- File Metadata Bar -->
+            <!-- File Metadata Info -->
             <div id="fileMeta" class="mt-6 hidden pt-6 border-t border-gray-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono-code text-xs">
                 <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
                     <span class="text-gray-500 text-[10px] block">NAMA BERKAS</span>
@@ -126,39 +128,39 @@
                     <span id="metaSize" class="text-white font-bold block"></span>
                 </div>
                 <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
-                    <span class="text-gray-500 text-[10px] block">HASH SHA-256</span>
+                    <span class="text-gray-500 text-[10px] block">FINGERPRINT SHA-256</span>
                     <span id="metaHash" class="text-emerald-400 font-bold truncate block">Menghitung...</span>
                 </div>
             </div>
         </div>
 
-        <!-- Dashboard Result (Hidden by default) -->
+        <!-- Investigation Results Dashboard -->
         <div id="investigationDashboard" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            <!-- Navigation Sidebar -->
+            <!-- Sidebar Navigation -->
             <div class="lg:col-span-3 flex flex-col gap-2.5">
                 <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-gray-900 border border-cyan-500/40 text-cyan-400 font-bold text-xs transition-all text-left">
-                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 1. Matriks Risiko & Log
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 1. Matriks & Log Sistem
                 </button>
                 <button onclick="switchTab('secrets')" id="tab-secrets" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
                     <i data-lucide="key" class="w-4 h-4"></i> 2. Kebocoran Kunci Rahasia
                 </button>
                 <button onclick="switchTab('manifest')" id="tab-manifest" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
-                    <i data-lucide="shield-alert" class="w-4 h-4"></i> 3. Audit Izin (Permissions)
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> 3. Audit Izin (Permissions)
                 </button>
                 <button onclick="switchTab('strings')" id="tab-strings" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
-                    <i data-lucide="globe" class="w-4 h-4"></i> 4. Endpoint URL & IP Server
+                    <i data-lucide="globe" class="w-4 h-4"></i> 4. Endpoint & String Extractor
                 </button>
                 <button onclick="switchTab('structure')" id="tab-structure" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
-                    <i data-lucide="cpu" class="w-4 h-4"></i> 5. Pustaka Native (.SO)
+                    <i data-lucide="layers" class="w-4 h-4"></i> 5. Pustaka Native (.SO)
                 </button>
                 
                 <button onclick="exportReport()" class="mt-4 flex items-center justify-center gap-2.5 w-full p-4 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-xs font-mono-code transition-all">
-                    <i data-lucide="download" class="w-4 h-4"></i> EKSPOR BUKTI BUKTI (JSON)
+                    <i data-lucide="download" class="w-4 h-4"></i> EKSPOR LAPORAN (JSON)
                 </button>
             </div>
 
-            <!-- Tab Panels Area -->
+            <!-- Panel Contents -->
             <div class="lg:col-span-9 space-y-6">
                 
                 <!-- Panel 1: Overview -->
@@ -170,9 +172,9 @@
                             <p id="riskLabel" class="text-xs text-gray-400 mt-1 font-mono-code">Status Aman</p>
                         </div>
                         <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
-                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">KUNCI RAHASIA TERLEKAS</span>
+                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">SECRETS TERLEKAS</span>
                             <h3 id="secretCount" class="text-3xl font-orbitron font-black text-cyan-400 mt-1">0</h3>
-                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Hardcoded Tokens/API</p>
+                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Kunci API / Hardcoded Tokens</p>
                         </div>
                         <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
                             <span class="text-[10px] font-bold text-gray-500 font-mono-code block">IZIN RISK TINGGI</span>
@@ -183,7 +185,7 @@
 
                     <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
                         <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4 flex items-center gap-2">
-                            <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i> CYBER ENGINE TERMINAL LOGS
+                            <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i> EKSEKUSI FORENSIK TERMINAL LOGS
                         </h3>
                         <div id="consoleLog" class="bg-gray-900/80 border border-gray-800 rounded-2xl p-4 font-mono-code text-xs text-gray-300 h-64 overflow-y-auto whitespace-pre-wrap leading-relaxed"></div>
                     </div>
@@ -192,15 +194,15 @@
                 <!-- Panel 2: Secrets -->
                 <div id="panel-secrets" class="hidden space-y-4">
                     <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
-                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">LEAKED CREDENTIALS & SENSITIVE KEYS</h3>
+                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">LEAKED CREDENTIALS & API KEYS</h3>
                         <div id="secretsList" class="space-y-3 max-h-[500px] overflow-y-auto"></div>
                     </div>
                 </div>
 
-                <!-- Panel 3: Manifest -->
+                <!-- Panel 3: Permissions -->
                 <div id="panel-manifest" class="hidden space-y-4">
                     <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
-                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">PERMISSIONS AUDIT & PRIVILEGES</h3>
+                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">PERMISSIONS AUDIT & SYSTEM PRIVILEGES</h3>
                         <div id="permissionsList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[450px] overflow-y-auto"></div>
                     </div>
                 </div>
@@ -209,8 +211,8 @@
                 <div id="panel-strings" class="hidden space-y-4">
                     <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-                            <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider">EXTRACTED ENDPOINTS & IP ADDRESSES</h3>
-                            <input type="text" id="stringFilter" oninput="filterStrings()" placeholder="Filter IP / Domain..." class="bg-gray-900 border border-gray-800 px-4 py-2 rounded-xl text-xs font-mono-code text-cyan-400 focus:outline-none focus:border-cyan-500 w-full sm:w-64">
+                            <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider">EXTRACTED ENDPOINTS & DOMAINS</h3>
+                            <input type="text" id="stringFilter" oninput="filterStrings()" placeholder="Filter IP / URL..." class="bg-gray-900 border border-gray-800 px-4 py-2 rounded-xl text-xs font-mono-code text-cyan-400 focus:outline-none focus:border-cyan-500 w-full sm:w-64">
                         </div>
                         <div id="urlsList" class="bg-gray-900/80 border border-gray-800 rounded-2xl p-4 font-mono-code text-xs text-cyan-300 max-h-[400px] overflow-y-auto whitespace-pre-wrap"></div>
                     </div>
@@ -219,7 +221,7 @@
                 <!-- Panel 5: Structure -->
                 <div id="panel-structure" class="hidden space-y-4">
                     <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
-                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">NATIVE LIBRARIES (.SO) & ARCHITECTURES</h3>
+                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">NATIVE LIBRARIES (.SO) & ARCHITECTURE</h3>
                         <div id="nativeLibsList" class="space-y-2 font-mono-code text-xs"></div>
                     </div>
                 </div>
@@ -229,19 +231,19 @@
 
     </main>
 
-    <!-- Footer Developer Attribution -->
+    <!-- Footer -->
     <footer class="border-t border-gray-800/80 bg-gray-950/90 py-6 mt-12">
         <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
             <p class="text-xs font-mono-code text-gray-400">
                 Aplikasi ini dikembangkan oleh <span class="text-cyan-400 font-bold font-orbitron tracking-widest text-glow-cyan">ZEEO</span>
             </p>
             <p class="text-[11px] text-gray-600 font-mono-code">
-                Cyber Forensic Suite Engine &copy; 2026 ZEEO. All Rights Reserved.
+                APK ANALYZER PRIME (by ZEEO) &copy; 2026. Standalone Forensic Engine.
             </p>
         </div>
     </footer>
 
-    <!-- Logic Engine -->
+    <!-- Logic Engine JS -->
     <script>
         lucide.createIcons();
 
@@ -278,7 +280,7 @@
             document.getElementById('fileMeta').classList.remove('hidden');
             document.getElementById('btnStart').removeAttribute('disabled');
 
-            // Calculate SHA-256
+            // Calculate Hash
             const buffer = await apkFile.arrayBuffer();
             const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
@@ -301,18 +303,18 @@
             if(!apkFile) return;
 
             document.getElementById('investigationDashboard').classList.remove('hidden');
-            logConsole(`Mulai eksekusi forensik ZEEO Engine pada target: ${apkFile.name}`, 'info');
+            logConsole(`Mulai mengekstraksi berkas target: ${apkFile.name}`, 'info');
 
             try {
                 currentZip = await JSZip.loadAsync(apkFile);
                 const files = Object.keys(currentZip.files);
-                logConsole(`Struktur APK terbongkar. Total ${files.length} berkas internal ditemukan.`, 'success');
+                logConsole(`Struktur APK terbuka. ${files.length} berkas internal siap diperiksa.`, 'success');
 
                 // 1. Audit Native Libraries
                 forensicResults.nativeLibs = files.filter(f => f.startsWith('lib/') && f.endsWith('.so'));
                 renderNativeLibs();
 
-                // 2. Scan Patterns & Endpoints
+                // 2. Scan Secrets & Patterns
                 forensicResults.secrets = [];
                 forensicResults.urls = [];
                 forensicResults.permissions = [];
@@ -327,7 +329,7 @@
 
                 const urlPattern = /https?:\/\/[a-zA-Z0-9\.\-_]+(?::\d+)?(?:\/[^\s"']*)?/g;
 
-                logConsole(`Pemindaian biner untuk melacak kredensial rahasia & domain tersembunyi...`, 'info');
+                logConsole(`Pemindaian biner untuk melacak kunci sensitif dan URL endpoint...`, 'info');
 
                 for(let f of files) {
                     if(f.endsWith('.json') || f.endsWith('.xml') || f.endsWith('.js') || f.endsWith('.properties') || f.endsWith('.dex')) {
@@ -355,9 +357,9 @@
                     }
                 }
 
-                logConsole(`Investigasi selesai. Ditemukan ${forensicResults.secrets.length} kunci rahasia terdeteksi!`, 'success');
+                logConsole(`Analisis selesai. Ditemukan ${forensicResults.secrets.length} kunci sensitif.`, 'success');
 
-                // 3. Scan Android Permissions
+                // 3. Scan Permissions
                 if(currentZip.files['AndroidManifest.xml']) {
                     const manifestStr = await currentZip.files['AndroidManifest.xml'].async('string');
                     const permRegex = /android\.permission\.[A-Z_]+/g;
@@ -402,7 +404,7 @@
         function renderSecrets() {
             const container = document.getElementById('secretsList');
             if(forensicResults.secrets.length === 0) {
-                container.innerHTML = `<div class="p-4 text-center text-gray-500 font-mono-code text-xs">Bersih. Tidak ditemukan kredensial bocor.</div>`;
+                container.innerHTML = `<div class="p-4 text-center text-gray-500 font-mono-code text-xs">Bersih. Tidak ada kunci sensitif yang terdeteksi.</div>`;
                 return;
             }
 
@@ -465,7 +467,7 @@
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(forensicResults, null, 2));
             const dlAnchorElem = document.createElement('a');
             dlAnchorElem.setAttribute("href",     dataStr     );
-            dlAnchorElem.setAttribute("download", `ZEEO_APK_Report_${Date.now()}.json`);
+            dlAnchorElem.setAttribute("download", `APK_ANALYZER_PRIME_Report_${Date.now()}.json`);
             dlAnchorElem.click();
         }
     </script>
