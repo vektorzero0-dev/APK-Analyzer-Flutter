@@ -23,13 +23,15 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Capacitor and Android Engine
+    - name: Setup Web Directory & Capacitor Engine
       run: |
+        mkdir -p www
+        cp index.html www/ 2>/dev/null || echo "<html><body><h2>APK Static Analyzer</h2></body></html>" > www/index.html
         npm init -y
         npm install @capacitor/core @capacitor/cli @capacitor/android
-        npx cap init APKAnalyzer com.vektorzero.app --web-dir .
+        npx cap init APKAnalyzer com.vektorzero.app --web-dir www
         npx cap add android
-        npx cap sync
+        npx cap copy android
 
     - name: Build Debug APK
       run: |
@@ -41,4 +43,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: APK-Static-Analyzer-Debug
-        path: android/app/build/outputs/apk/debug/app-debug.apkuild/app/outputs/flutter-apk/app-debug.apk
+        path: android/app/build/outputs/apk/debug/app-debug.apk
