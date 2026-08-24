@@ -1,126 +1,473 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberSec Mobile Suite (PWA)</title>
+    <title>ZEEO - APK SENTINEL PRIME | Forensic & Reverse Engineering</title>
     
-    <!-- PWA Setup: Agar bisa di-install di Home Screen HP -->
-    <meta name="theme-color" content="#090d16">
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22CyberSec%20Suite%22%2C%22short_name%22%3A%22CyberSec%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23090d16%22%2C%22theme_color%22%3A%22%23090d16%22%7D">
-
+    <!-- Tailwind CSS & Lucide Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background-color: #090d16; color: #f8fafc; margin: 0; padding: 15px; }
-        .nav-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; border-bottom: 1px solid #1e293b; }
-        .tab-btn { background: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 10px 14px; border-radius: 8px; font-weight: bold; font-size: 12px; cursor: pointer; white-space: nowrap; }
-        .tab-btn.active { background: #0284c7; color: white; border-color: #38bdf8; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .card { background: #111827; border: 1px solid #1f2937; border-radius: 10px; padding: 16px; margin-bottom: 15px; }
-        h2 { color: #38bdf8; margin-top: 0; font-size: 18px; }
-        .btn { background: #0284c7; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
-        input[type="text"], input[type="file"] { width: 100%; padding: 10px; background: #0b0f19; border: 1px solid #1f2937; color: white; border-radius: 6px; margin-top: 8px; }
-        .console { background: #030712; border: 1px solid #111827; padding: 12px; border-radius: 6px; font-family: monospace; font-size: 12px; height: 200px; overflow-y: auto; color: #22c55e; margin-top: 10px; white-space: pre-wrap; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Fira+Code:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            color: #f3f4f6;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.08) 0px, transparent 50%);
+        }
+
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-mono-code { font-family: 'Fira Code', monospace; }
+
+        /* Neon Glows */
+        .glow-cyan { box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.25); }
+        .glow-red { box-shadow: 0 0 35px -5px rgba(239, 68, 68, 0.25); }
+        .text-glow-cyan { text-shadow: 0 0 12px rgba(6, 182, 212, 0.6); }
+        .text-glow-red { text-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+        
+        /* Grid Overlay Effect */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between bg-grid">
 
-<div class="nav-tabs">
-    <button class="tab-btn active" onclick="openTab('tab1', this)">1. Static Analyzer</button>
-    <button class="tab-btn" onclick="openTab('tab2', this)">2. Signal Radar</button>
-    <button class="tab-btn" onclick="openTab('tab3', this)">3. HTTP Proxy</button>
-    <button class="tab-btn" onclick="openTab('tab4', this)">4. OSINT Recon</button>
-</div>
+    <!-- Navbar Header -->
+    <header class="border-b border-cyan-500/20 bg-gray-950/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <!-- Logo & Brand -->
+            <div class="flex items-center gap-4">
+                <div class="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-red-500/20 border border-cyan-500/40 glow-cyan">
+                    <i data-lucide="shield-alert" class="w-6 h-6 text-cyan-400"></i>
+                    <span class="absolute -bottom-1 -right-1 flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+                    </span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-orbitron font-black text-xl tracking-wider text-white">ZEEO <span class="text-cyan-400">SENTINEL</span> <span class="text-red-500">PRIME</span></h1>
+                        <span class="px-2 py-0.5 text-[10px] font-mono-code font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded-md">v3.0 PRO</span>
+                    </div>
+                    <p class="text-xs text-gray-400 font-mono-code">ULTIMATE CLIENT-SIDE APK FORENSIC ENGINE</p>
+                </div>
+            </div>
 
-<div id="tab1" class="tab-content active">
-    <div class="card">
-        <h2>🔍 Static Analyzer & Secrets Scanner</h2>
-        <input type="file" id="apkInput" accept=".apk">
-        <button class="btn" onclick="scanAPK()">Scan APK & Hardcoded Secrets</button>
-        <div id="logStatic" class="console">Pilih file .APK untuk mendeteksi Manifest dan Hardcoded Secrets...</div>
-    </div>
-</div>
+            <!-- Developer Social / Action Buttons -->
+            <div class="flex items-center gap-3">
+                <a href="https://wa.me/6282371729760?text=Halo%20ZEEO,%20Saya%20tertarik%20dengan%20APK%20Sentinel%20Prime" target="_blank" 
+                   class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition-all">
+                    <i data-lucide="message-square" class="w-4 h-4"></i>
+                    <span>WhatsApp</span>
+                </a>
+                <a href="mailto:vektorzero0@gmail.com" 
+                   class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-semibold transition-all">
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                    <span>Email ZEEO</span>
+                </a>
+            </div>
 
-<div id="tab2" class="tab-content">
-    <div class="card">
-        <h2>📡 Signal Radar Visualizer</h2>
-        <button class="btn" onclick="scanRadar()">Scan Signal (RSSI)</button>
-        <div id="logRadar" class="console">Status: Menunggu Pemindaian...</div>
-    </div>
-</div>
+        </div>
+    </header>
 
-<div id="tab3" class="tab-content">
-    <div class="card">
-        <h2>🛡️ HTTP Proxy Interceptor</h2>
-        <button class="btn" style="background: #16a34a;" onclick="toggleVPN()">Start Interceptor Log</button>
-        <div id="logProxy" class="console">Traffic Log (HTTP/HTTPS Requests):</div>
-    </div>
-</div>
+    <!-- Content Wrapper -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 my-8 space-y-8 flex-grow w-full">
 
-<div id="tab4" class="tab-content">
-    <div class="card">
-        <h2>🌐 OSINT Recon Utility</h2>
-        <input type="text" id="targetHost" placeholder="Domain / IP (cth: example.com)">
-        <button class="btn" onclick="runOSINT()">Jalankan Rekognisi</button>
-        <div id="logOSINT" class="console">Hasil DNS Lookup & Header Inspection...</div>
-    </div>
-</div>
+        <!-- Hero Dropzone Area -->
+        <div class="relative overflow-hidden bg-gray-950/80 border border-gray-800 hover:border-cyan-500/50 rounded-3xl p-8 transition-all glow-cyan">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+                <div class="space-y-3 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono-code">
+                        <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+                        <span>100% LOCAL RAM DESTRUCTION ENGINE</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-orbitron font-bold text-white">SIAP UNTUK INVESTIGASI APK?</h2>
+                    <p class="text-sm text-gray-400 max-w-xl">Muat berkas APK target untuk langsung membongkar kredensial rahasia, audit izin berbahaya, analisis *native binary*, hingga pelacakan endpoint C2.</p>
+                </div>
 
-<script>
-function openTab(tabId, el) {
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    el.classList.add('active');
-}
+                <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+                    <button onclick="document.getElementById('apkFileInput').click()" class="w-full sm:w-auto px-6 py-3.5 bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-cyan-500/40 rounded-2xl font-bold text-xs tracking-wider font-mono-code transition-all flex items-center justify-center gap-3">
+                        <i data-lucide="folder-open" class="w-5 h-5"></i> PILIH APK TARGET
+                    </button>
+                    <button onclick="runFullInvestigation()" id="btnStart" disabled class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 disabled:opacity-40 hover:from-cyan-400 hover:to-blue-500 text-gray-950 font-black text-xs tracking-wider font-orbitron rounded-2xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3">
+                        <i data-lucide="zap" class="w-5 h-5"></i> EKSEKUSI FORENSIK
+                    </button>
+                </div>
+                <input type="file" id="apkFileInput" accept=".apk" class="hidden" onchange="handleFileChange(event)">
+            </div>
 
-async function scanAPK() {
-    const file = document.getElementById('apkInput').files[0];
-    const log = document.getElementById('logStatic');
-    if(!file) return alert('Pilih file APK!');
-    log.innerText = `[+] Menguraikan Berkas: ${file.name}...\n`;
-    try {
-        const zip = await JSZip.loadAsync(file);
-        const files = Object.keys(zip.files);
-        log.innerText += `[+] Total Berkas: ${files.length}\n[+] Memindai Secrets...\n`;
-        let secretsFound = 0;
-        for(let filename of files.slice(0, 30)) {
-            if(filename.endsWith('.js') || filename.endsWith('.json') || filename.endsWith('.xml')) {
-                const text = await zip.files[filename].async('string');
-                if(/(api[_-]?key|secret|password|bearer)/gi.test(text)) {
-                    log.innerText += ` [!] POTENSI SECRET: ${filename}\n`;
-                    secretsFound++;
+            <!-- File Metadata Bar -->
+            <div id="fileMeta" class="mt-6 hidden pt-6 border-t border-gray-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono-code text-xs">
+                <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
+                    <span class="text-gray-500 text-[10px] block">NAMA BERKAS</span>
+                    <span id="metaName" class="text-cyan-400 font-bold truncate block"></span>
+                </div>
+                <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
+                    <span class="text-gray-500 text-[10px] block">UKURAN BERKAS</span>
+                    <span id="metaSize" class="text-white font-bold block"></span>
+                </div>
+                <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
+                    <span class="text-gray-500 text-[10px] block">HASH SHA-256</span>
+                    <span id="metaHash" class="text-emerald-400 font-bold truncate block">Menghitung...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Result (Hidden by default) -->
+        <div id="investigationDashboard" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Navigation Sidebar -->
+            <div class="lg:col-span-3 flex flex-col gap-2.5">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-gray-900 border border-cyan-500/40 text-cyan-400 font-bold text-xs transition-all text-left">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 1. Matriks Risiko & Log
+                </button>
+                <button onclick="switchTab('secrets')" id="tab-secrets" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                    <i data-lucide="key" class="w-4 h-4"></i> 2. Kebocoran Kunci Rahasia
+                </button>
+                <button onclick="switchTab('manifest')" id="tab-manifest" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i> 3. Audit Izin (Permissions)
+                </button>
+                <button onclick="switchTab('strings')" id="tab-strings" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                    <i data-lucide="globe" class="w-4 h-4"></i> 4. Endpoint URL & IP Server
+                </button>
+                <button onclick="switchTab('structure')" id="tab-structure" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                    <i data-lucide="cpu" class="w-4 h-4"></i> 5. Pustaka Native (.SO)
+                </button>
+                
+                <button onclick="exportReport()" class="mt-4 flex items-center justify-center gap-2.5 w-full p-4 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-xs font-mono-code transition-all">
+                    <i data-lucide="download" class="w-4 h-4"></i> EKSPOR BUKTI BUKTI (JSON)
+                </button>
+            </div>
+
+            <!-- Tab Panels Area -->
+            <div class="lg:col-span-9 space-y-6">
+                
+                <!-- Panel 1: Overview -->
+                <div id="panel-overview" class="space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
+                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">SKOR BAHAYA ANCAMAN</span>
+                            <h3 id="riskScore" class="text-3xl font-orbitron font-black text-emerald-400 mt-1">0 / 100</h3>
+                            <p id="riskLabel" class="text-xs text-gray-400 mt-1 font-mono-code">Status Aman</p>
+                        </div>
+                        <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
+                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">KUNCI RAHASIA TERLEKAS</span>
+                            <h3 id="secretCount" class="text-3xl font-orbitron font-black text-cyan-400 mt-1">0</h3>
+                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Hardcoded Tokens/API</p>
+                        </div>
+                        <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
+                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">IZIN RISK TINGGI</span>
+                            <h3 id="dangerPermCount" class="text-3xl font-orbitron font-black text-red-500 mt-1">0</h3>
+                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Izin Privilese Berbahaya</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
+                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4 flex items-center gap-2">
+                            <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i> CYBER ENGINE TERMINAL LOGS
+                        </h3>
+                        <div id="consoleLog" class="bg-gray-900/80 border border-gray-800 rounded-2xl p-4 font-mono-code text-xs text-gray-300 h-64 overflow-y-auto whitespace-pre-wrap leading-relaxed"></div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Secrets -->
+                <div id="panel-secrets" class="hidden space-y-4">
+                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
+                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">LEAKED CREDENTIALS & SENSITIVE KEYS</h3>
+                        <div id="secretsList" class="space-y-3 max-h-[500px] overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- Panel 3: Manifest -->
+                <div id="panel-manifest" class="hidden space-y-4">
+                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
+                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">PERMISSIONS AUDIT & PRIVILEGES</h3>
+                        <div id="permissionsList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[450px] overflow-y-auto"></div>
+                    </div>
+                </div>
+
+                <!-- Panel 4: Strings -->
+                <div id="panel-strings" class="hidden space-y-4">
+                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                            <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider">EXTRACTED ENDPOINTS & IP ADDRESSES</h3>
+                            <input type="text" id="stringFilter" oninput="filterStrings()" placeholder="Filter IP / Domain..." class="bg-gray-900 border border-gray-800 px-4 py-2 rounded-xl text-xs font-mono-code text-cyan-400 focus:outline-none focus:border-cyan-500 w-full sm:w-64">
+                        </div>
+                        <div id="urlsList" class="bg-gray-900/80 border border-gray-800 rounded-2xl p-4 font-mono-code text-xs text-cyan-300 max-h-[400px] overflow-y-auto whitespace-pre-wrap"></div>
+                    </div>
+                </div>
+
+                <!-- Panel 5: Structure -->
+                <div id="panel-structure" class="hidden space-y-4">
+                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
+                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">NATIVE LIBRARIES (.SO) & ARCHITECTURES</h3>
+                        <div id="nativeLibsList" class="space-y-2 font-mono-code text-xs"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Developer Attribution -->
+    <footer class="border-t border-gray-800/80 bg-gray-950/90 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="text-xs font-mono-code text-gray-400">
+                Aplikasi ini dikembangkan oleh <span class="text-cyan-400 font-bold font-orbitron tracking-widest text-glow-cyan">ZEEO</span>
+            </p>
+            <p class="text-[11px] text-gray-600 font-mono-code">
+                Cyber Forensic Suite Engine &copy; 2026 ZEEO. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Logic Engine -->
+    <script>
+        lucide.createIcons();
+
+        let currentZip = null;
+        let apkFile = null;
+        let forensicResults = {
+            hash: '',
+            secrets: [],
+            permissions: [],
+            urls: [],
+            nativeLibs: [],
+            riskScore: 0
+        };
+
+        function switchTab(tab) {
+            document.querySelectorAll('[id^="panel-"]').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('bg-gradient-to-r', 'from-cyan-950/60', 'to-gray-900', 'border-cyan-500/40', 'text-cyan-400');
+                b.classList.add('bg-gray-950', 'border-gray-800', 'text-gray-400');
+            });
+
+            document.getElementById(`panel-${tab}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            activeBtn.classList.remove('bg-gray-950', 'border-gray-800', 'text-gray-400');
+            activeBtn.classList.add('bg-gradient-to-r', 'from-cyan-950/60', 'to-gray-900', 'border-cyan-500/40', 'text-cyan-400');
+        }
+
+        async function handleFileChange(e) {
+            apkFile = e.target.files[0];
+            if(!apkFile) return;
+
+            document.getElementById('metaName').innerText = apkFile.name;
+            document.getElementById('metaSize').innerText = `${(apkFile.size / (1024*1024)).toFixed(2)} MB`;
+            document.getElementById('fileMeta').classList.remove('hidden');
+            document.getElementById('btnStart').removeAttribute('disabled');
+
+            // Calculate SHA-256
+            const buffer = await apkFile.arrayBuffer();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            forensicResults.hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            document.getElementById('metaHash').innerText = forensicResults.hash;
+        }
+
+        function logConsole(msg, type = 'info') {
+            const consoleBox = document.getElementById('consoleLog');
+            let color = 'text-gray-300';
+            if(type === 'success') color = 'text-emerald-400';
+            if(type === 'warn') color = 'text-yellow-400';
+            if(type === 'danger') color = 'text-red-400';
+
+            consoleBox.innerHTML += `<span class="${color}">[${new Date().toLocaleTimeString()}] ${msg}</span>\n`;
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        async function runFullInvestigation() {
+            if(!apkFile) return;
+
+            document.getElementById('investigationDashboard').classList.remove('hidden');
+            logConsole(`Mulai eksekusi forensik ZEEO Engine pada target: ${apkFile.name}`, 'info');
+
+            try {
+                currentZip = await JSZip.loadAsync(apkFile);
+                const files = Object.keys(currentZip.files);
+                logConsole(`Struktur APK terbongkar. Total ${files.length} berkas internal ditemukan.`, 'success');
+
+                // 1. Audit Native Libraries
+                forensicResults.nativeLibs = files.filter(f => f.startsWith('lib/') && f.endsWith('.so'));
+                renderNativeLibs();
+
+                // 2. Scan Patterns & Endpoints
+                forensicResults.secrets = [];
+                forensicResults.urls = [];
+                forensicResults.permissions = [];
+
+                const secretPatterns = [
+                    { name: 'Google API Key', regex: /AIzaSy[a-zA-Z0-9_\-]{35}/g },
+                    { name: 'Firebase Database URL', regex: /https:\/\/[a-zA-Z0-9\-]+\.firebaseio\.com/g },
+                    { name: 'AWS Access Key ID', regex: /AKIA[0-9A-Z]{16}/g },
+                    { name: 'JWT Authorization Token', regex: /eyJ[a-zA-Z0-9_\-]+\.eyJ[a-zA-Z0-9_\-]+\.[a-zA-Z0-9_\-]+/g },
+                    { name: 'Private Key Header', regex: /-----BEGIN PRIVATE KEY-----/g }
+                ];
+
+                const urlPattern = /https?:\/\/[a-zA-Z0-9\.\-_]+(?::\d+)?(?:\/[^\s"']*)?/g;
+
+                logConsole(`Pemindaian biner untuk melacak kredensial rahasia & domain tersembunyi...`, 'info');
+
+                for(let f of files) {
+                    if(f.endsWith('.json') || f.endsWith('.xml') || f.endsWith('.js') || f.endsWith('.properties') || f.endsWith('.dex')) {
+                        try {
+                            const content = await currentZip.files[f].async('string');
+                            
+                            secretPatterns.forEach(p => {
+                                const matches = content.match(p.regex);
+                                if(matches) {
+                                    matches.forEach(m => {
+                                        forensicResults.secrets.push({ type: p.name, file: f, value: m });
+                                    });
+                                }
+                            });
+
+                            const urls = content.match(urlPattern);
+                            if(urls) {
+                                urls.forEach(u => {
+                                    if(!forensicResults.urls.includes(u) && u.length < 120) {
+                                        forensicResults.urls.push(u);
+                                    }
+                                });
+                            }
+                        } catch(e){}
+                    }
                 }
+
+                logConsole(`Investigasi selesai. Ditemukan ${forensicResults.secrets.length} kunci rahasia terdeteksi!`, 'success');
+
+                // 3. Scan Android Permissions
+                if(currentZip.files['AndroidManifest.xml']) {
+                    const manifestStr = await currentZip.files['AndroidManifest.xml'].async('string');
+                    const permRegex = /android\.permission\.[A-Z_]+/g;
+                    const matches = manifestStr.match(permRegex);
+                    if(matches) forensicResults.permissions = [...new Set(matches)];
+                }
+
+                renderOverview();
+                renderSecrets();
+                renderPermissions();
+                renderStrings();
+
+            } catch(e) {
+                logConsole(`[ERROR CRITICAL] Kegagalan eksekusi: ${e.message}`, 'danger');
             }
         }
-        if(secretsFound === 0) log.innerText += `[+] Tidak ada hardcoded secrets di berkas sampel.\n`;
-    } catch(e) { log.innerText += `[EROR] ${e.message}`; }
-}
 
-function scanRadar() {
-    document.getElementById('logRadar').innerText = `[+] Pemindaian Sinyal Sederhana:\n - AP_Guest_Network (RSSI: -45 dBm)\n - BLE_Beacon_Device (RSSI: -72 dBm)\n`;
-}
+        function renderOverview() {
+            const dangerPerms = ['android.permission.CAMERA', 'android.permission.ACCESS_FINE_LOCATION', 'android.permission.RECORD_AUDIO', 'android.permission.READ_SMS', 'android.permission.SYSTEM_ALERT_WINDOW'];
+            const highRiskFound = forensicResults.permissions.filter(p => dangerPerms.includes(p)).length;
 
-let vpnActive = false;
-function toggleVPN() {
-    vpnActive = !vpnActive;
-    document.getElementById('logProxy').innerText = vpnActive ? `[+] Service Aktif.\nGET https://api.example.com/v1/user [200 OK]\n` : `[-] Service Dihentikan.`;
-}
+            let score = (forensicResults.secrets.length * 25) + (highRiskFound * 15);
+            score = Math.min(score, 100);
 
-async function runOSINT() {
-    const host = document.getElementById('targetHost').value;
-    const log = document.getElementById('logOSINT');
-    if(!host) return alert('Masukkan Domain/IP!');
-    log.innerText = `[+] DNS Lookup untuk: ${host}...\n`;
-    try {
-        const res = await fetch(`https://dns.google/resolve?name=${host}`);
-        const data = await res.json();
-        log.innerText += JSON.stringify(data.Answer || data, null, 2);
-    } catch(e) { log.innerText += `[EROR] ${e.message}`; }
-}
-</script>
+            const scoreEl = document.getElementById('riskScore');
+            scoreEl.innerText = `${score} / 100`;
+            document.getElementById('secretCount').innerText = forensicResults.secrets.length;
+            document.getElementById('dangerPermCount').innerText = highRiskFound;
 
+            if(score > 60) {
+                scoreEl.className = 'text-3xl font-orbitron font-black text-red-500 mt-1 text-glow-red';
+                document.getElementById('riskLabel').innerText = 'KRITIS (High Security Threat)';
+            } else if(score > 20) {
+                scoreEl.className = 'text-3xl font-orbitron font-black text-yellow-400 mt-1';
+                document.getElementById('riskLabel').innerText = 'WASPADA (Medium Risk)';
+            } else {
+                scoreEl.className = 'text-3xl font-orbitron font-black text-emerald-400 mt-1 text-glow-cyan';
+                document.getElementById('riskLabel').innerText = 'AMAN (Low Risk)';
+            }
+        }
+
+        function renderSecrets() {
+            const container = document.getElementById('secretsList');
+            if(forensicResults.secrets.length === 0) {
+                container.innerHTML = `<div class="p-4 text-center text-gray-500 font-mono-code text-xs">Bersih. Tidak ditemukan kredensial bocor.</div>`;
+                return;
+            }
+
+            container.innerHTML = forensicResults.secrets.map(s => `
+                <div class="bg-gray-900 p-4 rounded-2xl border border-red-500/30 flex flex-col gap-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-red-400 font-mono-code">[!] ${s.type}</span>
+                        <span class="text-[10px] text-gray-500 font-mono-code">${s.file}</span>
+                    </div>
+                    <code class="text-xs text-yellow-300 break-all bg-gray-950 p-3 rounded-xl border border-gray-800 font-mono-code mt-1">${s.value}</code>
+                </div>
+            `).join('');
+        }
+
+        function renderPermissions() {
+            const container = document.getElementById('permissionsList');
+            if(forensicResults.permissions.length === 0) {
+                container.innerHTML = `<div class="col-span-full p-4 text-center text-gray-500 font-mono-code text-xs">Tidak dapat membaca manifes izin.</div>`;
+                return;
+            }
+
+            container.innerHTML = forensicResults.permissions.map(p => `
+                <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 flex items-center gap-2.5 text-xs font-mono-code text-gray-300">
+                    <i data-lucide="shield" class="w-4 h-4 text-cyan-400"></i>
+                    <span class="truncate">${p.replace('android.permission.', '')}</span>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderStrings() {
+            const box = document.getElementById('urlsList');
+            if(forensicResults.urls.length === 0) {
+                box.innerText = 'Tidak ada URL yang terekstraksi.';
+                return;
+            }
+            box.innerText = forensicResults.urls.join('\n');
+        }
+
+        function filterStrings() {
+            const query = document.getElementById('stringFilter').value.toLowerCase();
+            const filtered = forensicResults.urls.filter(u => u.toLowerCase().includes(query));
+            document.getElementById('urlsList').innerText = filtered.join('\n');
+        }
+
+        function renderNativeLibs() {
+            const container = document.getElementById('nativeLibsList');
+            if(forensicResults.nativeLibs.length === 0) {
+                container.innerHTML = `<div class="p-4 text-center text-gray-500">Tidak ada pustaka .SO terdeteksi.</div>`;
+                return;
+            }
+            container.innerHTML = forensicResults.nativeLibs.map(l => `
+                <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 text-cyan-400 font-mono-code">
+                    [+] ${l}
+                </div>
+            `).join('');
+        }
+
+        function exportReport() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(forensicResults, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href",     dataStr     );
+            dlAnchorElem.setAttribute("download", `ZEEO_APK_Report_${Date.now()}.json`);
+            dlAnchorElem.click();
+        }
+    </script>
 </body>
 </html>
