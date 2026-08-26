@@ -14,41 +14,113 @@
         
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #030712;
+            background-color: #020617;
             color: #f3f4f6;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.08) 0px, transparent 50%);
+            overflow-x: hidden;
         }
 
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .font-mono-code { font-family: 'Fira Code', monospace; }
 
-        .glow-cyan { box-shadow: 0 0 35px -5px rgba(6, 182, 212, 0.25); }
-        .glow-red { box-shadow: 0 0 35px -5px rgba(239, 68, 68, 0.25); }
-        .text-glow-cyan { text-shadow: 0 0 12px rgba(6, 182, 212, 0.6); }
-        .text-glow-red { text-shadow: 0 0 12px rgba(239, 68, 68, 0.6); }
-
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 99px; }
-        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
-        
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        /* Glow Effects */
+        .glow-cyan { 
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.35), inset 0 0 15px rgba(6, 182, 212, 0.1); 
         }
+        .glow-cyan-lg { 
+            box-shadow: 0 0 50px rgba(6, 182, 212, 0.4); 
+        }
+        .glow-red { 
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.35); 
+        }
+        .text-glow-cyan { text-shadow: 0 0 12px rgba(6, 182, 212, 0.8); }
+        .text-glow-red { text-shadow: 0 0 12px rgba(239, 68, 68, 0.8); }
+
+        /* Animated Grid Background */
+        .bg-cyber-grid {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(6, 182, 212, 0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(6, 182, 212, 0.07) 1px, transparent 1px);
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Floating Glowing Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: rgba(6, 182, 212, 0.25);
+            top: -100px;
+            left: -100px;
+            animation: floatOrb1 12s ease-in-out infinite alternate;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(239, 68, 68, 0.18);
+            bottom: -150px;
+            right: -150px;
+            animation: floatOrb2 15s ease-in-out infinite alternate;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: rgba(168, 85, 247, 0.2);
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: floatOrb3 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatOrb1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(120px, 80px) scale(1.2); }
+        }
+
+        @keyframes floatOrb2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-100px, -90px) scale(1.15); }
+        }
+
+        @keyframes floatOrb3 {
+            0% { transform: translate(-50%, -50%) scale(0.8); }
+            100% { transform: translate(-40%, -60%) scale(1.2); }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; box-shadow: 0 0 10px #06b6d4; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between bg-grid">
+<body class="min-h-screen flex flex-col justify-between bg-cyber-grid relative">
+
+    <!-- Glowing Background Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
     <!-- Header -->
-    <header class="border-b border-cyan-500/20 bg-gray-950/80 backdrop-blur-xl sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <header class="border-b border-cyan-500/30 bg-slate-950/70 backdrop-blur-2xl sticky top-0 z-50 shadow-lg shadow-cyan-950/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
             <div class="flex items-center gap-4">
-                <div class="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-red-500/20 border border-cyan-500/40 glow-cyan">
+                <div class="relative flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-red-500/20 border border-cyan-400/50 glow-cyan">
                     <i data-lucide="file-search" class="w-6 h-6 text-cyan-400"></i>
                     <span class="absolute -bottom-1 -right-1 flex h-3 w-3">
                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -57,23 +129,23 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="font-orbitron font-black text-xl tracking-wider text-white">
+                        <h1 class="font-orbitron font-black text-xl tracking-wider text-white text-glow-cyan">
                             APK ANALYZER <span class="text-cyan-400">PRIME</span>
                         </h1>
-                        <span class="px-2 py-0.5 text-[10px] font-mono-code font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 rounded-md">by ZEEO</span>
+                        <span class="px-2 py-0.5 text-[10px] font-mono-code font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-400/40 rounded-md shadow-sm shadow-cyan-500/50">by ZEEO</span>
                     </div>
-                    <p class="text-xs text-gray-400 font-mono-code">SUPER-FOCUSED FORENSIC ENGINE (FLUTTER SUPPORTED)</p>
+                    <p class="text-xs text-cyan-300/70 font-mono-code">SUPER-FOCUSED FORENSIC ENGINE (FLUTTER SUPPORTED)</p>
                 </div>
             </div>
 
             <div class="flex items-center gap-3">
                 <a href="https://wa.me/6282371729760?text=Halo%20ZEEO,%20Saya%20menggunakan%20APK%20ANALYZER%20PRIME" target="_blank" 
-                   class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition-all">
+                   class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-semibold transition-all hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                     <i data-lucide="message-square" class="w-4 h-4"></i>
                     <span>WhatsApp</span>
                 </a>
                 <a href="mailto:vektorzero0@gmail.com" 
-                   class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-semibold transition-all">
+                   class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 text-xs font-semibold transition-all hover:shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                     <i data-lucide="mail" class="w-4 h-4"></i>
                     <span>Email Developer</span>
                 </a>
@@ -82,27 +154,27 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 my-8 space-y-8 flex-grow w-full">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 my-8 space-y-8 flex-grow w-full relative z-10">
 
         <!-- Dropzone -->
-        <div class="relative overflow-hidden bg-gray-950/80 border border-gray-800 hover:border-cyan-500/50 rounded-3xl p-8 transition-all glow-cyan">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative overflow-hidden bg-slate-950/70 border border-cyan-500/30 hover:border-cyan-400/70 rounded-3xl p-8 transition-all duration-300 glow-cyan backdrop-blur-xl">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
             
             <div class="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
                 <div class="space-y-3 text-center md:text-left">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-mono-code">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/40 text-red-400 text-xs font-mono-code shadow-[0_0_10px_rgba(239,68,68,0.2)]">
                         <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
                         <span>100% LOCAL RAM FORENSIC ANALYSIS</span>
                     </div>
-                    <h2 class="text-2xl sm:text-3xl font-orbitron font-bold text-white">ANALISIS FILE APK SEKARANG</h2>
-                    <p class="text-sm text-gray-400 max-w-xl">Muat berkas APK target untuk langsung membongkar kredensial rahasia.</p>
+                    <h2 class="text-2xl sm:text-3xl font-orbitron font-bold text-white text-glow-cyan">ANALISIS FILE APK SEKARANG</h2>
+                    <p class="text-sm text-slate-300 max-w-xl">Muat berkas APK target untuk langsung membongkar kredensial rahasia.</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-                    <button onclick="document.getElementById('apkFileInput').click()" class="w-full sm:w-auto px-6 py-3.5 bg-gray-900 hover:bg-gray-800 text-cyan-400 border border-cyan-500/40 rounded-2xl font-bold text-xs tracking-wider font-mono-code transition-all flex items-center justify-center gap-3">
-                        <i data-lucide="folder-open" class="w-5 h-5"></i> PILIH APK
+                    <button onclick="document.getElementById('apkFileInput').click()" class="w-full sm:w-auto px-6 py-3.5 bg-slate-900/80 hover:bg-slate-800 text-cyan-300 border border-cyan-500/50 rounded-2xl font-bold text-xs tracking-wider font-mono-code transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center justify-center gap-3">
+                        <i data-lucide="folder-open" class="w-5 h-5 text-cyan-400"></i> PILIH APK
                     </button>
-                    <button onclick="runFullInvestigation()" id="btnStart" disabled class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 disabled:opacity-40 hover:from-cyan-400 hover:to-blue-500 text-gray-950 font-black text-xs tracking-wider font-orbitron rounded-2xl transition-all shadow-lg shadow-cyan-500/20 flex items-center justify-center gap-3">
+                    <button onclick="runFullInvestigation()" id="btnStart" disabled class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 disabled:opacity-40 text-slate-950 font-black text-xs tracking-wider font-orbitron rounded-2xl transition-all shadow-lg shadow-cyan-500/30 flex items-center justify-center gap-3 disabled:shadow-none hover:shadow-cyan-400/50">
                         <i data-lucide="search" class="w-5 h-5"></i> MULAI ANALISIS
                     </button>
                 </div>
@@ -110,17 +182,17 @@
             </div>
 
             <!-- Metadata Info -->
-            <div id="fileMeta" class="mt-6 hidden pt-6 border-t border-gray-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono-code text-xs">
-                <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
-                    <span class="text-gray-500 text-[10px] block">NAMA BERKAS</span>
+            <div id="fileMeta" class="mt-6 hidden pt-6 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono-code text-xs">
+                <div class="bg-slate-900/80 p-3.5 rounded-xl border border-cyan-500/20 backdrop-blur-md">
+                    <span class="text-slate-400 text-[10px] block">NAMA BERKAS</span>
                     <span id="metaName" class="text-cyan-400 font-bold truncate block"></span>
                 </div>
-                <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
-                    <span class="text-gray-500 text-[10px] block">UKURAN BERKAS</span>
+                <div class="bg-slate-900/80 p-3.5 rounded-xl border border-cyan-500/20 backdrop-blur-md">
+                    <span class="text-slate-400 text-[10px] block">UKURAN BERKAS</span>
                     <span id="metaSize" class="text-white font-bold block"></span>
                 </div>
-                <div class="bg-gray-900/90 p-3.5 rounded-xl border border-gray-800">
-                    <span class="text-gray-500 text-[10px] block">FINGERPRINT SHA-256</span>
+                <div class="bg-slate-900/80 p-3.5 rounded-xl border border-cyan-500/20 backdrop-blur-md">
+                    <span class="text-slate-400 text-[10px] block">FINGERPRINT SHA-256</span>
                     <span id="metaHash" class="text-emerald-400 font-bold truncate block">Menghitung...</span>
                 </div>
             </div>
@@ -131,28 +203,28 @@
             
             <!-- Sidebar -->
             <div class="lg:col-span-3 flex flex-col gap-2.5">
-                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gradient-to-r from-cyan-950/60 to-gray-900 border border-cyan-500/40 text-cyan-400 font-bold text-xs transition-all text-left">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gradient-to-r from-cyan-950/80 to-slate-900 border border-cyan-500/50 text-cyan-400 font-bold text-xs transition-all text-left glow-cyan">
                     <i data-lucide="layout-dashboard" class="w-4 h-4"></i> 1. Matriks & Log Sistem
                 </button>
-                <button onclick="switchTab('secrets')" id="tab-secrets" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                <button onclick="switchTab('secrets')" id="tab-secrets" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-400 font-bold text-xs hover:border-cyan-500/40 hover:text-cyan-300 transition-all text-left backdrop-blur-md">
                     <i data-lucide="key" class="w-4 h-4"></i> 2. Kebocoran Kunci Rahasia
                 </button>
-                <button onclick="switchTab('manifest')" id="tab-manifest" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                <button onclick="switchTab('manifest')" id="tab-manifest" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-400 font-bold text-xs hover:border-cyan-500/40 hover:text-cyan-300 transition-all text-left backdrop-blur-md">
                     <i data-lucide="shield-check" class="w-4 h-4"></i> 3. Audit Izin (Permissions)
                 </button>
-                <button onclick="switchTab('strings')" id="tab-strings" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                <button onclick="switchTab('strings')" id="tab-strings" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-400 font-bold text-xs hover:border-cyan-500/40 hover:text-cyan-300 transition-all text-left backdrop-blur-md">
                     <i data-lucide="globe" class="w-4 h-4"></i> 4. Endpoint & String Extractor
                 </button>
-                <button onclick="switchTab('structure')" id="tab-structure" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-gray-950 border border-gray-800 text-gray-400 font-bold text-xs hover:border-gray-700 transition-all text-left">
+                <button onclick="switchTab('structure')" id="tab-structure" class="tab-btn flex items-center gap-3 w-full p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-slate-400 font-bold text-xs hover:border-cyan-500/40 hover:text-cyan-300 transition-all text-left backdrop-blur-md">
                     <i data-lucide="layers" class="w-4 h-4"></i> 5. Pustaka Native (.SO)
                 </button>
                 
                 <!-- Action Export Buttons -->
                 <div class="mt-4 space-y-2">
-                    <button onclick="exportReport()" class="flex items-center justify-center gap-2.5 w-full p-3.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-bold text-xs font-mono-code transition-all">
+                    <button onclick="exportReport()" class="flex items-center justify-center gap-2.5 w-full p-3.5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-bold text-xs font-mono-code transition-all hover:shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                         <i data-lucide="file-json" class="w-4 h-4"></i> EKSPOR JSON (RAPI)
                     </button>
-                    <button onclick="exportTextReport()" class="flex items-center justify-center gap-2.5 w-full p-3.5 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-bold text-xs font-mono-code transition-all">
+                    <button onclick="exportTextReport()" class="flex items-center justify-center gap-2.5 w-full p-3.5 rounded-2xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 font-bold text-xs font-mono-code transition-all hover:shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                         <i data-lucide="file-text" class="w-4 h-4"></i> EKSPOR LAPORAN (TXT)
                     </button>
                 </div>
@@ -164,62 +236,62 @@
                 <!-- Panel 1: Overview -->
                 <div id="panel-overview" class="space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
-                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">SKOR BAHAYA ANCAMAN</span>
+                        <div class="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl backdrop-blur-md">
+                            <span class="text-[10px] font-bold text-slate-400 font-mono-code block">SKOR BAHAYA ANCAMAN</span>
                             <h3 id="riskScore" class="text-3xl font-orbitron font-black text-emerald-400 mt-1">0 / 100</h3>
-                            <p id="riskLabel" class="text-xs text-gray-400 mt-1 font-mono-code">Status Aman</p>
+                            <p id="riskLabel" class="text-xs text-slate-400 mt-1 font-mono-code">Status Aman</p>
                         </div>
-                        <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
-                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">SECRETS TERLEKAS</span>
-                            <h3 id="secretCount" class="text-3xl font-orbitron font-black text-cyan-400 mt-1">0</h3>
-                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Kunci API / Tokens / Password</p>
+                        <div class="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl backdrop-blur-md">
+                            <span class="text-[10px] font-bold text-slate-400 font-mono-code block">SECRETS TERLEKAS</span>
+                            <h3 id="secretCount" class="text-3xl font-orbitron font-black text-cyan-400 mt-1 text-glow-cyan">0</h3>
+                            <p class="text-xs text-slate-400 mt-1 font-mono-code">Kunci API / Tokens / Password</p>
                         </div>
-                        <div class="bg-gray-950 border border-gray-800 p-5 rounded-2xl">
-                            <span class="text-[10px] font-bold text-gray-500 font-mono-code block">IZIN RISK TINGGI</span>
-                            <h3 id="dangerPermCount" class="text-3xl font-orbitron font-black text-red-500 mt-1">0</h3>
-                            <p class="text-xs text-gray-400 mt-1 font-mono-code">Izin Privilese Berbahaya</p>
+                        <div class="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl backdrop-blur-md">
+                            <span class="text-[10px] font-bold text-slate-400 font-mono-code block">IZIN RISK TINGGI</span>
+                            <h3 id="dangerPermCount" class="text-3xl font-orbitron font-black text-red-500 mt-1 text-glow-red">0</h3>
+                            <p class="text-xs text-slate-400 mt-1 font-mono-code">Izin Privilese Berbahaya</p>
                         </div>
                     </div>
 
-                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
-                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4 flex items-center gap-2">
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 backdrop-blur-md">
+                        <h3 class="text-xs font-bold text-slate-300 font-mono-code tracking-wider mb-4 flex items-center gap-2">
                             <i data-lucide="terminal" class="w-4 h-4 text-cyan-400"></i> EKSEKUSI FORENSIK TERMINAL LOGS
                         </h3>
-                        <div id="consoleLog" class="bg-gray-900/80 border border-gray-800 rounded-2xl p-4 font-mono-code text-xs text-gray-300 h-64 overflow-y-auto whitespace-pre-wrap leading-relaxed"></div>
+                        <div id="consoleLog" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 font-mono-code text-xs text-slate-300 h-64 overflow-y-auto whitespace-pre-wrap leading-relaxed"></div>
                     </div>
                 </div>
 
                 <!-- Panel 2: Secrets -->
                 <div id="panel-secrets" class="hidden space-y-4">
-                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
-                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">LEAKED CREDENTIALS & API KEYS</h3>
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 backdrop-blur-md">
+                        <h3 class="text-xs font-bold text-slate-300 font-mono-code tracking-wider mb-4">LEAKED CREDENTIALS & API KEYS</h3>
                         <div id="secretsList" class="space-y-3 max-h-[500px] overflow-y-auto"></div>
                     </div>
                 </div>
 
                 <!-- Panel 3: Permissions -->
                 <div id="panel-manifest" class="hidden space-y-4">
-                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
-                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">PERMISSIONS AUDIT & SYSTEM PRIVILEGES</h3>
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 backdrop-blur-md">
+                        <h3 class="text-xs font-bold text-slate-300 font-mono-code tracking-wider mb-4">PERMISSIONS AUDIT & SYSTEM PRIVILEGES</h3>
                         <div id="permissionsList" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[450px] overflow-y-auto"></div>
                     </div>
                 </div>
 
                 <!-- Panel 4: Strings -->
                 <div id="panel-strings" class="hidden space-y-4">
-                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 backdrop-blur-md">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-                            <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider">EXTRACTED ENDPOINTS & DOMAINS</h3>
-                            <input type="text" id="stringFilter" oninput="filterStrings()" placeholder="Filter IP / URL..." class="bg-gray-900 border border-gray-800 px-4 py-2 rounded-xl text-xs font-mono-code text-cyan-400 focus:outline-none focus:border-cyan-500 w-full sm:w-64">
+                            <h3 class="text-xs font-bold text-slate-300 font-mono-code tracking-wider">EXTRACTED ENDPOINTS & DOMAINS</h3>
+                            <input type="text" id="stringFilter" oninput="filterStrings()" placeholder="Filter IP / URL..." class="bg-slate-900 border border-slate-800 px-4 py-2 rounded-xl text-xs font-mono-code text-cyan-400 focus:outline-none focus:border-cyan-500 w-full sm:w-64">
                         </div>
-                        <div id="urlsList" class="bg-gray-900/80 border border-gray-800 rounded-2xl p-4 font-mono-code text-xs text-cyan-300 max-h-[400px] overflow-y-auto whitespace-pre-wrap"></div>
+                        <div id="urlsList" class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 font-mono-code text-xs text-cyan-300 max-h-[400px] overflow-y-auto whitespace-pre-wrap"></div>
                     </div>
                 </div>
 
                 <!-- Panel 5: Structure -->
                 <div id="panel-structure" class="hidden space-y-4">
-                    <div class="bg-gray-950 border border-gray-800 rounded-3xl p-6">
-                        <h3 class="text-xs font-bold text-gray-400 font-mono-code tracking-wider mb-4">NATIVE LIBRARIES (.SO) & ARCHITECTURE</h3>
+                    <div class="bg-slate-950/80 border border-slate-800 rounded-3xl p-6 backdrop-blur-md">
+                        <h3 class="text-xs font-bold text-slate-300 font-mono-code tracking-wider mb-4">NATIVE LIBRARIES (.SO) & ARCHITECTURE</h3>
                         <div id="nativeLibsList" class="space-y-2 font-mono-code text-xs"></div>
                     </div>
                 </div>
@@ -230,12 +302,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-800/80 bg-gray-950/90 py-6 mt-12">
+    <footer class="border-t border-slate-800/80 bg-slate-950/80 py-6 mt-12 relative z-10 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
-            <p class="text-xs font-mono-code text-gray-400">
+            <p class="text-xs font-mono-code text-slate-400">
                 Aplikasi ini dikembangkan oleh <span class="text-cyan-400 font-bold font-orbitron tracking-widest text-glow-cyan">ZEEO</span>
             </p>
-            <p class="text-[11px] text-gray-600 font-mono-code">
+            <p class="text-[11px] text-slate-500 font-mono-code">
                 APK ANALYZER PRIME (by ZEEO) &copy; 2026. Standalone Forensic Engine.
             </p>
         </div>
@@ -259,14 +331,14 @@
         function switchTab(tab) {
             document.querySelectorAll('[id^="panel-"]').forEach(p => p.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('bg-gradient-to-r', 'from-cyan-950/60', 'to-gray-900', 'border-cyan-500/40', 'text-cyan-400');
-                b.classList.add('bg-gray-950', 'border-gray-800', 'text-gray-400');
+                b.classList.remove('bg-gradient-to-r', 'from-cyan-950/80', 'to-slate-900', 'border-cyan-500/50', 'text-cyan-400', 'glow-cyan');
+                b.classList.add('bg-slate-950/80', 'border-slate-800', 'text-slate-400');
             });
 
             document.getElementById(`panel-${tab}`).classList.remove('hidden');
             const activeBtn = document.getElementById(`tab-${tab}`);
-            activeBtn.classList.remove('bg-gray-950', 'border-gray-800', 'text-gray-400');
-            activeBtn.classList.add('bg-gradient-to-r', 'from-cyan-950/60', 'to-gray-900', 'border-cyan-500/40', 'text-cyan-400');
+            activeBtn.classList.remove('bg-slate-950/80', 'border-slate-800', 'text-slate-400');
+            activeBtn.classList.add('bg-gradient-to-r', 'from-cyan-950/80', 'to-slate-900', 'border-cyan-500/50', 'text-cyan-400', 'glow-cyan');
         }
 
         async function handleFileChange(e) {
@@ -287,7 +359,7 @@
 
         function logConsole(msg, type = 'info') {
             const consoleBox = document.getElementById('consoleLog');
-            let color = 'text-gray-300';
+            let color = 'text-slate-300';
             if(type === 'success') color = 'text-emerald-400';
             if(type === 'warn') color = 'text-yellow-400';
             if(type === 'danger') color = 'text-red-400';
@@ -296,7 +368,6 @@
             consoleBox.scrollTop = consoleBox.scrollHeight;
         }
 
-        // Helper untuk memodelkan string ASCII dari biner (.so / .dex)
         function extractPrintableStrings(buffer, minLength = 6) {
             const bytes = new Uint8Array(buffer);
             let strings = [];
@@ -328,7 +399,6 @@
                 const files = Object.keys(currentZip.files);
                 logConsole(`Struktur APK terbuka. ${files.length} berkas internal terdeteksi.`, 'success');
 
-                // 1. Audit Native Libraries
                 forensicResults.nativeLibs = files.filter(f => f.startsWith('lib/') && f.endsWith('.so'));
                 renderNativeLibs();
 
@@ -350,7 +420,6 @@
                 logConsole(`Menjalankan Engine Forensik Biner (Mendukung Flutter libapp.so & Dex)...`, 'info');
 
                 for(let f of files) {
-                    // Pindai file teks standar dan file biner kritis (libapp.so / classes.dex)
                     if(f.endsWith('.json') || f.endsWith('.xml') || f.endsWith('.js') || f.endsWith('.properties') || f.endsWith('.dex') || f.includes('libapp.so')) {
                         try {
                             const buffer = await currentZip.files[f].async('arraybuffer');
@@ -369,7 +438,6 @@
                             const urls = textContent.match(urlPattern);
                             if(urls) {
                                 urls.forEach(u => {
-                                    // Clean null bytes / trailing noise
                                     const cleanUrl = u.split('\0')[0].replace(/[\\,\(\)]+$/, '');
                                     if(!forensicResults.urls.includes(cleanUrl) && cleanUrl.length < 150 && !cleanUrl.includes('schema') && !cleanUrl.includes('adobe.com')) {
                                         forensicResults.urls.push(cleanUrl);
@@ -380,7 +448,6 @@
                     }
                 }
 
-                // 3. Scan Permissions dari Binary AndroidManifest.xml
                 if(currentZip.files['AndroidManifest.xml']) {
                     try {
                         const manifestBuffer = await currentZip.files['AndroidManifest.xml'].async('arraybuffer');
@@ -441,17 +508,17 @@
         function renderSecrets() {
             const container = document.getElementById('secretsList');
             if(forensicResults.secrets.length === 0) {
-                container.innerHTML = `<div class="p-4 text-center text-gray-500 font-mono-code text-xs">Bersih. Tidak ada kunci rahasia yang terdeteksi secara otomatis.</div>`;
+                container.innerHTML = `<div class="p-4 text-center text-slate-500 font-mono-code text-xs">Bersih. Tidak ada kunci rahasia yang terdeteksi secara otomatis.</div>`;
                 return;
             }
 
             container.innerHTML = forensicResults.secrets.map(s => `
-                <div class="bg-gray-900 p-4 rounded-2xl border border-red-500/30 flex flex-col gap-1.5">
+                <div class="bg-slate-900/90 p-4 rounded-2xl border border-red-500/40 flex flex-col gap-1.5 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold text-red-400 font-mono-code">[!] ${s.type}</span>
-                        <span class="text-[10px] text-gray-500 font-mono-code">${s.file}</span>
+                        <span class="text-[10px] text-slate-400 font-mono-code">${s.file}</span>
                     </div>
-                    <code class="text-xs text-yellow-300 break-all bg-gray-950 p-3 rounded-xl border border-gray-800 font-mono-code mt-1">${s.value}</code>
+                    <code class="text-xs text-yellow-300 break-all bg-slate-950 p-3 rounded-xl border border-slate-800 font-mono-code mt-1">${s.value}</code>
                 </div>
             `).join('');
         }
@@ -459,12 +526,12 @@
         function renderPermissions() {
             const container = document.getElementById('permissionsList');
             if(forensicResults.permissions.length === 0) {
-                container.innerHTML = `<div class="col-span-full p-4 text-center text-gray-500 font-mono-code text-xs">Tidak ada izin spesifik ditemukan.</div>`;
+                container.innerHTML = `<div class="col-span-full p-4 text-center text-slate-500 font-mono-code text-xs">Tidak ada izin spesifik ditemukan.</div>`;
                 return;
             }
 
             container.innerHTML = forensicResults.permissions.map(p => `
-                <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 flex items-center gap-2.5 text-xs font-mono-code text-gray-300">
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex items-center gap-2.5 text-xs font-mono-code text-slate-300 hover:border-cyan-500/30 transition-all">
                     <i data-lucide="shield" class="w-4 h-4 text-cyan-400"></i>
                     <span class="truncate">${p.replace('android.permission.', '')}</span>
                 </div>
@@ -490,17 +557,16 @@
         function renderNativeLibs() {
             const container = document.getElementById('nativeLibsList');
             if(forensicResults.nativeLibs.length === 0) {
-                container.innerHTML = `<div class="p-4 text-center text-gray-500">Tidak ada pustaka .SO terdeteksi.</div>`;
+                container.innerHTML = `<div class="p-4 text-center text-slate-500">Tidak ada pustaka .SO terdeteksi.</div>`;
                 return;
             }
             container.innerHTML = forensicResults.nativeLibs.map(l => `
-                <div class="bg-gray-900 p-3 rounded-xl border border-gray-800 text-cyan-400 font-mono-code">
+                <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 text-cyan-400 font-mono-code hover:border-cyan-500/40 transition-all">
                     [+] ${l}
                 </div>
             `).join('');
         }
 
-        // 1. Ekspor Laporan JSON (Terstruktur & Rapi)
         function exportReport() {
             const cleanReport = {
                 app_info: {
@@ -528,7 +594,6 @@
             dlAnchor.click();
         }
 
-        // 2. Ekspor Laporan Teks Ringkas (.TXT)
         function exportTextReport() {
             let text = `====================================================\n`;
             text += `   APK ANALYZER PRIME (by ZEEO) - LAPORAN FORENSIK   \n`;
