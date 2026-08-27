@@ -30,7 +30,7 @@ jobs:
         if [ -f "index.html" ]; then
           cp index.html www/
         else
-          echo '<!DOCTYPE html><html><head><title>APK Analyzer</title></head><body><h2>APK Static Analyzer</h2><a href="https://wa.me/6282371729760">WA</a></body></html>' > www/index.html
+          echo '<!DOCTYPE html><html><head><title>APK Analyzer</title></head><body><h2>APK Static Analyzer</h2></body></html>' > www/index.html
         fi
         npm init -y
         npm install @capacitor/core@5.7.0 @capacitor/cli@5.7.0 @capacitor/android@5.7.0
